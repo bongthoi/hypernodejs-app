@@ -1,0 +1,91 @@
+<html>
+
+<head>
+	<title>INDEX</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="/css/header.css" rel="stylesheet" type="text/css">
+	<link href="/css/footer.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<div class="container-flui">
+		<% include ../partials/header %>
+			<div class="container">
+
+				<br>
+				<br>
+				<br>
+				<div class="row">
+					<div class="col-md-6">
+						<img src="https://i2.wp.com/images.viblo.asia/98337971-3d48-4c7e-ae62-52c42a205abf.gif?w=780&ssl=1">
+					</div>
+					<div class="col-md-1"></div>
+					<div class="col-md-5">
+						<table class="table transaction-table">
+							<thead>
+								<tr>
+									<th class="numberoftransactioinlabel">TRANSACTIONS PER DAY</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>The number of bitcoin transactions in the last 24 hours.</td>
+								</tr>
+								<tr>
+									<td class="numberoftransactioinvalue">{{listTrans.length}}</td>
+								</tr>
+								<tr>
+									<td>Transactions since May 25, 2018, 9:03:32 AM.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<br>
+				<br>
+				<br>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<span class="numberoftransactioinlabel">LATEST TRANSACTION</span>
+					</div>
+					<hr>
+					<div class="col-md-12">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>TRANSACTION TYPE</th>
+									<th>TIME</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{tran.transactionId}}</td>
+									<td>{{tran.transactionType}}</td>
+									<td>{{tran.transactionTimestamp | date:'medium'}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 z-paging-text-center">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination">
+								<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+								<li class="page-item"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">Next</a></li>
+							</ul>
+						</nav>
+
+					</div>
+				</div>
+			</div><br><br><br>
+			<% include ../partials/footer %>
+	</div>
+</body>
+
+</html>
