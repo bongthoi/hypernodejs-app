@@ -6,7 +6,7 @@ import expressValidator from 'express-validator';
 import flash from 'connect-flash';
 import session from 'express-session';
 import passport from 'passport';
-const LocalStrategy = require('passport-local').Strategy;
+
 
 /** */
 import index from './src/routers/index';
@@ -14,7 +14,7 @@ import users from './src/routers/users';
 
 /** */
 const app = express();
-const PORT = 3000;
+const PORT = 4300;
 
 /** */
 app.use(express.static(__dirname + '/public'));

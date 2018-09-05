@@ -1,0 +1,37 @@
+<!doctype html>
+
+<head>
+	<title>Dash Board</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="/css/header.css" rel="stylesheet" type="text/css">
+	<link href="/css/footer.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<div class="container-flui">
+		<% include ../partials/header %>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							Dashboard
+						</div>
+						<div class="panel-body">
+							<% if(user){ %>
+								<li>ID:<%= user.buyerID %></li>
+								<li>PW:<%= user.buyerPW %></li>
+								<li>Corp:<%= user.companyName %></li>
+							  <% } else{ %>  
+								<li>no user</li>
+								<li></li>
+							 <% } %>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<% include ../partials/footer%>
+	</div>
+</body>
+
+</html>
