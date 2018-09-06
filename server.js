@@ -9,8 +9,8 @@ import passport from 'passport';
 
 
 /** */
-import index from './src/routers/index';
-import users from './src/routers/users';
+import index from './src/controllers/index';
+import users from './src/controllers/users';
 
 /** */
 const app = express();
