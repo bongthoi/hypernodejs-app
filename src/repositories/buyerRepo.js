@@ -95,7 +95,7 @@ module.exports = class BuyerRepo {
             })
             .catch(err => {
                 console.log(method + " -->failed");
-                return console.log(err);
+                return null;
             });
     };
     update(_buyer) {

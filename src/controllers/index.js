@@ -28,7 +28,7 @@ router.post('/users/register', function(req, res){
 	let email = req.body.email;
 	let password = req.body.password;
 	let cfm_pwd = req.body.cfm_pwd;
-	let userType="Seller";
+	let userType=req.body.user_type;
 	
 	req.checkBody('email', 'Email is required').notEmpty();
 	req.checkBody('email', 'Please enter a valid email').isEmail();
@@ -92,7 +92,7 @@ passport.use(new LocalStrategy({
 },
 	function(req, email, password, done) {
 		getUserById(email,function(err, user) {
-			console.log("getUserById");
+			
 			if (err) { return done(err); }
 	  		if (!user) {
 				return done(null, false, req.flash('error_message', 'No email is found'));
