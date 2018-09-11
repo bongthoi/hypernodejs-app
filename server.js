@@ -9,8 +9,7 @@ import passport from 'passport';
 
 
 /** */
-import index from './src/controllers/index';
-//import users from './src/controllers/users';
+import index from './src/controllers';
 
 /** */
 const app = express();
@@ -48,7 +47,7 @@ app.use(function(req, res, next){
 });
 
 app.use('/', index);
-//app.use('/users', users);
+
 
 /** */
 app.listen(PORT, function(){
