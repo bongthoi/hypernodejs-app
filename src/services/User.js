@@ -1,12 +1,15 @@
 import bcrypt from 'bcryptjs';
 import bna_config from '../../config/bna_config.json';
+import UserModel from '../models/user';
 import BuyerModel from '../models/buyer';
 import BuyerRepo from '../repositories/buyerRepo';
-import UserModel from '../models/user';
+import SellerModel from '../models/seller';
+import SellerRepo from '../repositories/sellerRepo';
 
 
 /** */
 var buyerRepo=new BuyerRepo();
+var sellerRepo=new SellerRepo();
 
 /** */
 export const createUser = (newUser, callback) => {
@@ -22,7 +25,13 @@ export const createUser = (newUser, callback) => {
 		});
 		
 	}else{
-		console.log("222222222");
+		let seller=new SellerModel(newUser.userID,newUser.userPW,newUser.companyName);
+		bcrypt.genSalt(10, function(err, salt) {
+			bcrypt.hash(seller.sellerPW, salt, function(err, hash) {
+				seller.sellerPW = hash;			
+				sellerRepo.insert(seller,callback);
+			});
+		});
 	}	
 }
 

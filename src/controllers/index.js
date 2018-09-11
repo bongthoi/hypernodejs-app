@@ -28,7 +28,7 @@ router.post('/users/register', function(req, res){
 	let email = req.body.email;
 	let password = req.body.password;
 	let cfm_pwd = req.body.cfm_pwd;
-	let type="Buyer";
+	let userType="Seller";
 	
 	req.checkBody('email', 'Email is required').notEmpty();
 	req.checkBody('email', 'Please enter a valid email').isEmail();
@@ -45,15 +45,11 @@ router.post('/users/register', function(req, res){
 	else
 	{
 		
-		if(type.trim()==="Buyer".trim()){
-			userModel = new User(email,password,cpn_name,"Buyer");			
+		if(userType.trim()==="Buyer".trim()){
+			userModel = new User(email,password,cpn_name,userType);			
 		}else{
-			userModel = new User(email,password,cpn_name,"Seller");			
-			
+			userModel = new User(email,password,cpn_name,userType);			
 		}
-
-		
-		//let user=new User(email,password,cpn_name,"Buyer");
 
 		createUser(userModel,function(err, user){
 			if(err) throw err;
