@@ -1,11 +1,14 @@
 import express from 'express';
-import { User, createUser, comparePassword, getUserByEmail, getUserById } from '../services/User';
+import { createUser, comparePassword,getUserById } from '../services/User';
 import passport from 'passport';
-import buyer from "../models/buyer";
+import User from '../models/user';
+
 
 /** */
 let LocalStrategy = require('passport-local').Strategy;
 let router =  express.Router();
+
+let userModel={};
 
 /**public */
 router.get("/",function(req,res){
@@ -21,17 +24,18 @@ router.get('/users/login', function(req, res){
 });
 
 router.post('/users/register', function(req, res){
-  	let name = req.body.name;
+  	let cpn_name = req.body.cpn_name;
 	let email = req.body.email;
 	let password = req.body.password;
 	let cfm_pwd = req.body.cfm_pwd;
-
-	req.checkBody('name', 'Name is required').notEmpty();
+	let type="Buyer";
+	
 	req.checkBody('email', 'Email is required').notEmpty();
 	req.checkBody('email', 'Please enter a valid email').isEmail();
 	req.checkBody('password', 'Password is required').notEmpty();
 	req.checkBody('cfm_pwd', 'Confirm Password is required').notEmpty();
 	req.checkBody('cfm_pwd', 'Confirm Password Must Matches With Password').equals(password);
+	req.checkBody('cpn_name', 'Company Name is required').notEmpty();
 
 	let errors = req.validationErrors();
 	if(errors)
@@ -40,11 +44,20 @@ router.post('/users/register', function(req, res){
 	}
 	else
 	{
-		let user = new buyer(email,password,name);
+		
+		if(type.trim()==="Buyer".trim()){
+			userModel = new User(email,password,cpn_name,"Buyer");			
+		}else{
+			userModel = new User(email,password,cpn_name,"Seller");			
+			
+		}
 
-		createUser(user, function(err, user){
+		
+		//let user=new User(email,password,cpn_name,"Buyer");
+
+		createUser(userModel,function(err, user){
 			if(err) throw err;
-			else console.log(user);
+			else console.log(userModel);
 		});
 		req.flash('success_message','You have registered, Now please login');
 		res.redirect('login');
@@ -82,12 +95,13 @@ passport.use(new LocalStrategy({
 	passReqToCallback : true
 },
 	function(req, email, password, done) {
-		getUserByEmail(email, function(err, user) {
+		getUserById(email,function(err, user) {
+			console.log("getUserById");
 			if (err) { return done(err); }
 	  		if (!user) {
 				return done(null, false, req.flash('error_message', 'No email is found'));
 	  		}
-	  		comparePassword(password, user.buyerPW, function(err, isMatch) {
+	  		comparePassword(password, user.userPW, function(err, isMatch) {
 				if (err) { return done(err); }
 				if(isMatch){
 		  				return done(null, user, req.flash('success_message', 'You have successfully logged in!!'));
@@ -101,11 +115,11 @@ passport.use(new LocalStrategy({
 ));
 
 passport.serializeUser(function(user, done) {
-  	done(null, user.buyerID);
+  	done(null, user.userID);
 });
 
 passport.deserializeUser(function(id, done) {
-	getUserByEmail(id, function(err, user) {
+	getUserById(id,function(err, user) {
 		done(err, user);
   	});
 });

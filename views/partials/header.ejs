@@ -34,4 +34,14 @@
 			<%= error %>
 		</div>
 	<% } %>
+	
+	<%if (errors != '') { %>
+		<div class="alert alert-danger">
+		<% for(var i=0; i < errors.length; i++) { %>	
+			<ul>
+				<li><%= errors[i].msg %></li>					
+			</ul>
+		<%}%>				
+		</div>
+	<% } %>
 </div>

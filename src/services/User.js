@@ -1,23 +1,36 @@
 import bcrypt from 'bcryptjs';
-import buyerRepo from "../repositories/buyerRepo";
+import bna_config from '../../config/bna_config.json';
+import BuyerModel from '../models/buyer';
+import BuyerRepo from '../repositories/buyerRepo';
+import UserModel from '../models/user';
 
 
-export var User = new buyerRepo();
+/** */
+var buyerRepo=new BuyerRepo();
 
+/** */
 export const createUser = (newUser, callback) => {
-	bcrypt.genSalt(10, function(err, salt) {
-		bcrypt.hash(newUser.buyerPW, salt, function(err, hash) {
-			newUser.buyerPW = hash;
-			User.insert(newUser,callback);
+	
+	if(newUser.$class.trim()===bna_config.namespace+".Buyer"){
+		let buyer=new BuyerModel(newUser.userID,newUser.userPW,newUser.companyName);
+
+		bcrypt.genSalt(10, function(err, salt) {
+			bcrypt.hash(buyer.buyerPW, salt, function(err, hash) {
+				buyer.buyerPW = hash;			
+				buyerRepo.insert(buyer,callback);
+			});
 		});
-	});
+		
+	}else{
+		console.log("222222222");
+	}	
 }
 
-export const getUserByEmail = (email, callback) => {
-
-	User.getByID(email)
-	.then(data=>{
-		return callback(null,data);
+export const getUserById = (email,callback) => {
+	
+	buyerRepo.getByID(email)
+	.then(data=>{	
+		return callback(null,new UserModel(data['buyerID'],data['buyerPW'],data['companyName'],"Buyer"));
 	})
 	.catch(err=>{
 		console.log(err);
@@ -31,10 +44,3 @@ export const comparePassword = (password, hash, callback) => {
 		callback(null, isMatch);
 	});
 }
-/*
-export const getUserById = (id, callback) => {
-	console.log("getUserById="+id);
-	  //User.getByID(id, callback);
-	  return callback(null,{"$class":"org.acme.Z2BTestNetwork.Buyer","buyerID":"ffff@gmail.com","buyerPW":"$2a$10$RDJ.8BSILEiMCngVGNhiX.fEtLeYMO0gcJyrRLsueUcLpEUtl5vYa","companyName":"ffff"})
-}
-*/
