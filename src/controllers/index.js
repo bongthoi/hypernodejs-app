@@ -51,6 +51,31 @@ router.post('/users/register', function(req, res){
 	}
 });
 
+router.post('/users/login', passport.authenticate('local', {
+	failureRedirect: '/users/login', failureFlash: true
+	}), 
+	function(req, res){
+		req.flash('success_message', 'You are now Logged in!!');
+  		res.redirect('/users/dashboard');
+	}
+);
+
+router.get('/users/logout', function(req, res){
+	req.logout();
+	req.flash('success_message', 'You are logged out');
+	res.redirect('/users/login');
+});
+
+/**private */
+router.get('/users/dashboard', isLoggedIn, function(req, res){
+	res.render('dashboard/pages/dashboard');
+});
+
+router.get('/users/profile', isLoggedIn, function(req, res){
+  res.render('dashboard/pages/profile');
+});
+
+/** */
 passport.use(new LocalStrategy({
 	usernameField: 'email',
 	passwordField: 'password',
@@ -83,30 +108,6 @@ passport.deserializeUser(function(id, done) {
 	getUserByEmail(id, function(err, user) {
 		done(err, user);
   	});
-});
-
-router.post('/users/login', passport.authenticate('local', {
-	failureRedirect: '/users/login', failureFlash: true
-	}), 
-	function(req, res){
-		req.flash('success_message', 'You are now Logged in!!');
-  		res.redirect('/users/dashboard');
-	}
-);
-
-router.get('/users/logout', function(req, res){
-	req.logout();
-	req.flash('success_message', 'You are logged out');
-	res.redirect('/users/login');
-});
-
-/**private */
-router.get('/users/dashboard', isLoggedIn, function(req, res){
-	res.render('dashboard/pages/dashboard');
-});
-
-router.get('/users/profile', isLoggedIn, function(req, res){
-  res.render('dashboard/pages/profile');
 });
 
 function isLoggedIn(req, res, next){
