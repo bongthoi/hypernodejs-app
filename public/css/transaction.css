@@ -1,0 +1,23 @@
+.numberoftransactioinlabel{
+    font-size: large;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+.numberoftransactioinvalue{
+    font-size:100px;
+    text-transform: uppercase;
+    color:green;
+    text-align: center;
+}
+.transaction-table{
+    margin-top: 100px;
+    margin-left: 100;
+}
+
+.z-paging-text-center{
+    text-align: center;
+}
+.bg{
+    background-color: white !important;
+}

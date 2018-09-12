@@ -1,26 +1,20 @@
 "use strict";
 import transactionRepo from "../repositories/transactionRepo";
-import Transaction from "../models/transaction";
-
-
 var TransactionRepo = new transactionRepo();
 
-module.exports = class TransactionService {
-    constructor(){};
-    getAll(req, res) {
-        let method = "transactionService/getAll";
 
+export const getAllTransaction = (callback) => {
+    TransactionRepo.getAll()
+        .then(data => {
+            if (data != null) {
+                return callback(null, data);
+            } else {
+                return callback(null);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            return callback(null);
+        });
 
-        TransactionRepo.getAll()
-            .then(data => {
-                console.log(method + " -->success");
-                return data;
-            })
-            .catch(error => {
-                console.log(method + " -->failed: " + error.message);
-                res.sendStatus(500).json({"result":"failed","error":+error.message});
-            });
-
-    };
-    
-};
+}

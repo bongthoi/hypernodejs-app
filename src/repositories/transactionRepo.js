@@ -9,7 +9,7 @@ module.exports = class TransactionRepo {
         let result;
 
         let method = "transactionRepo/getAll";
-        console.log(method+"   "+db_config.api_ip + ":" + db_config.api_port + db_config.api_url + trans.$class);
+        //console.log(method+"   "+db_config.api_ip + ":" + db_config.api_port + db_config.api_url + trans.$class);
 
 
         const options = {
