@@ -9,11 +9,12 @@ import passport from 'passport';
 
 
 /** */
+import server_config from "./config/server_config.json";
 import index from './src/controllers';
 
 /** */
 const app = express();
-const PORT = 4300;
+const PORT = server_config.server_port;
 
 /** */
 app.use(express.static(__dirname + '/public'));
