@@ -90,6 +90,7 @@ router.get('/users/dashboard', isLoggedIn, function (req, res) {
 });
 
 router.get('/users/profile', isLoggedIn, function (req, res) {
+	console.log(req.session["passport"]["user"]);
 	res.render('dashboard/pages/profile');
 });
 
@@ -144,7 +145,6 @@ function isLoggedIn(req, res, next) {
 		res.redirect("/users/login");
 	}
 }
-
 
 /** */
 export default router;

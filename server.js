@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import cookeParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import expressValidator from 'express-validator';
 import flash from 'connect-flash';
@@ -24,7 +24,7 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookeParser());
+app.use(cookieParser());
 
 app.use(session({
 	secret: 'secret',
