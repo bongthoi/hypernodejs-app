@@ -1,0 +1,38 @@
+<div class="row">      
+    <div class="col-xs-12">
+        <div class="dropdown pull-right">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart
+               <%if(session.cart.totalItems){%>
+                <span><%= session.cart.totalItems %></span>
+                <%}%>
+            </a>
+            <%if(session.cart.totalItems){%>
+            <div class="dropdown-menu">
+                <div class="cart">
+                   
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <%= session.cart.items[1].item.title%>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <span class="badge">3</span>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            4 GLO
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="text-right">
+                            <div class="totalPrice">Total: 34 GLO</div>
+                            <a href="/cart/" class="btn btn-success">View Cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    
+</div>

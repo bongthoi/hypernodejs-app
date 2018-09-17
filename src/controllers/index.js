@@ -1,7 +1,9 @@
 import express from 'express';
 import moment from 'moment';
+import path from 'path';
+import fs from 'fs';
 import { createUser, comparePassword, getUserById } from '../services/User';
-import {getAllTransaction} from '../services/transactionService';
+import { getAllTransaction } from '../services/transactionService';
 import passport from 'passport';
 import User from '../models/user';
 
@@ -12,6 +14,11 @@ let router = express.Router();
 let userModel = {};
 //let TransactionService = new transactionService();
 
+/** */
+var Cart = require('../services/cart');
+var products = JSON.parse(fs.readFileSync(path.join(path.dirname(require.main.filename), 'data', 'products.json')));
+
+
 /**public */
 router.get("/", function (req, res) {
 	res.redirect("/transactions");
@@ -20,18 +27,18 @@ router.get("/", function (req, res) {
 
 router.get("/transactions", function (req, res) {
 	getAllTransaction(function (err, data) {
-		if(err){throw err}		
-		res.render("pages/transactions",{Trans:data,moment:moment});				
+		if (err) { throw err }
+		res.render("pages/transactions", { title: 'Transactions List', Trans: data, moment: moment });
 	});
-	
+
 });
 
 router.get('/users/register', function (req, res) {
-	res.render('pages/register');
+	res.render('pages/register', { title: "Register" });
 });
 
 router.get('/users/login', function (req, res) {
-	res.render('pages/login');
+	res.render('pages/login', { title: "Login User" });
 });
 
 router.post('/users/register', function (req, res) {
@@ -50,7 +57,7 @@ router.post('/users/register', function (req, res) {
 
 	let errors = req.validationErrors();
 	if (errors) {
-		res.render('pages/register', { errors: errors });
+		res.render('pages/register', { title: "Register", errors: errors });
 	}
 	else {
 
@@ -74,7 +81,7 @@ router.post('/users/login', passport.authenticate('local', {
 }),
 	function (req, res) {
 		req.flash('success_message', 'You are now Logged in!!');
-		res.redirect('/users/dashboard');
+		res.redirect('/private/dashboard');
 	}
 );
 
@@ -85,21 +92,21 @@ router.get('/users/logout', function (req, res) {
 });
 
 /**private */
-router.get('/users/dashboard', isLoggedIn, function (req, res) {
+router.get('/private/dashboard', isLoggedIn, function (req, res) {
 	res.render('dashboard/pages/dashboard');
 });
 
-router.get('/users/profile', isLoggedIn, function (req, res) {
+router.get('/private/profile', isLoggedIn, function (req, res) {
 	console.log(req.session["passport"]["user"]);
-	res.render('dashboard/pages/profile');
+	res.render('dashboard/pages/profile', { title: 'Profile Info' });
 });
 
-router.get("/users/transactions",isLoggedIn, function (req, res) {
+router.get("/private/transactions", isLoggedIn, function (req, res) {
 	getAllTransaction(function (err, data) {
-		if(err){throw err}		
-		res.render("dashboard/pages/transactions",{Trans:data,moment:moment});				
+		if (err) { throw err }
+		res.render("dashboard/pages/transactions", { title: 'Transactions List', Trans: data, moment: moment });
 	});
-	
+
 });
 /** */
 passport.use(new LocalStrategy({
@@ -145,6 +152,32 @@ function isLoggedIn(req, res, next) {
 		res.redirect("/users/login");
 	}
 }
+/**cart */
+router.get('/private/productlist', isLoggedIn, function (req, res, next) {
+	var cart = new Cart(req.session.cart ? req.session.cart : {});
+	req.session.cart = cart;
+	res.render('dashboard/pages/productlist', { title: 'Product List', products: products }
+	);
+});
+
+router.get('/add/:id', function (req, res, next) {
+	var productId = req.params.id;
+	var cart = new Cart(req.session.cart ? req.session.cart : {});
+	var product = products.filter(function (item) {
+		return item.id == productId;
+	});
+	
+	cart.add(product[0], productId);
+	req.session.cart = cart;
+	console.log(cart.items[1].item.title);
+	var t=JSON.parse(JSON.stringify(cart));
+
+	console.log(t.items);
+	
+	
+	
+	res.redirect('/private/productlist');
+});
 
 /** */
 export default router;
