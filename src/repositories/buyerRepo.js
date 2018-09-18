@@ -25,6 +25,7 @@ module.exports = class BuyerRepo {
        return rq(options)
             .then(data => {
                 console.log(method + " -->success");
+                
                 result=JSON.parse(JSON.stringify(data));
                 return result;
             })

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= title%></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/dashboard/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/dashboard/dist/css/AdminLTE.min.css">
+
+  <link rel="stylesheet" href="/dashboard/dist/css/skins/skin-blue.min.css">
+ 
+
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Main Header -->
+    <% include ../partials/header %>
+      <!-- Left side column. contains the logo and sidebar -->
+      <% include ../partials/leftmenu %>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+          <!-- Content Header (Page header) -->
+          <section class="content-header">
+            <h1>
+              <%=title%>
+              <small>more Info</small>
+            </h1>
+            <ol class="breadcrumb">
+              <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+              <li class="active">Here</li>
+            </ol>
+          </section>
+
+          <!-- Main content -->
+          <section class="content">
+
+            <!-- Your Page Content Here -->
+            <div class="row">
+              <div class="col-md-10">
+                <div class="col-md-12">
+                    <h3>Orders (<%=orders.length%>)</h3>
+    
+                </div>
+                <div class="table_order">
+                    <%if(orders.length>0)
+                        { for(var order of orders){
+
+                        
+                        %>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="order">Order #</th>
+                                    <th class="status">Status</th>
+                                    <th class="total">Total</th>
+                                    <th class="seller">Seller:
+                                        <span class="seller_name"><%=order.seller%></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="order_mail">
+                                        <strong><%=order.orderNumber%></strong>
+                                    </td>
+                                    <td class="payment_status">
+                                        <strong><%=order.status%>:
+                                            <span class="payment_time"><%=order.created%></span>
+                                        </strong>
+                                    </td>
+                                    <td class="total_money">
+                                        <strong><%=order.amount%></strong>
+                                    </td>
+                                    <td>
+                                        <div class="execute">
+                                                    <button class="btn btn-danger"  (click)="deleteOrder(order.orderNumber);">Delete</button>
+                                               
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="number">
+                                        <strong>Number</strong>
+                                    </td>
+                                    <td class="description">
+                                        <strong>Description</strong>
+                                    </td>
+                                    <td class="quantity">
+                                        <strong>Quantity</strong>
+                                    </td>
+                                    <td class="price">
+                                        <strong>Price</strong>
+                                    </td>
+                                </tr>
+                              <%for(var item of (order.items)){%>
+                                <tr>
+                                    <td class="number_stt"><%=item%></td>
+                                    <td class="description_product">adfdf</td>
+                                    <td class="quantity_stt"><%=item.quantity%></td>
+                                    <td class="price_money"><%=item.unitPrice%></td>
+                                </tr>
+                                <%}%> 
+                            </tbody>
+                        </table>
+                    <%
+                        }
+                    }%>
+                </div>
+                <div class="col-md-12">
+                    <a class="btn btn-primary" routerLink="/buyer-new-order/{{buyerid}}" role="button">Create New Order</a>
+                </div>
+    
+            </div>
+            </div>
+
+          </section>
+          <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Main Footer -->
+        <% include ../partials/footer%>
+
+          <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+          <div class="control-sidebar-bg"></div>
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- REQUIRED JS SCRIPTS -->
+
+  <!-- jQuery 2.2.3 -->
+  <script src="/dashboard/plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="/dashboard/bootstrap/js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/dashboard/dist/js/app.min.js"></script>
+
+  <!-- Optionally, you can add Slimscroll and FastClick plugins.
+     Both of these plugins are recommended to enhance the
+     user experience. Slimscroll is required when using the
+     fixed layout. -->
+</body>
+
+</html>

@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { createUser, comparePassword, getUserById } from '../services/User';
 import { getAllTransaction } from '../services/transactionService';
+import {getOrderByUserID} from '../services/orderService';
 import passport from 'passport';
 import User from '../models/user';
 
@@ -200,6 +201,17 @@ router.get('/private/deletecart', isLoggedIn, function (req, res, next) {
 	var cart = new Cart(false ? req.session.cart : {});	
 	req.session.cart = cart;
 	res.redirect('/private/viewcart');
+});
+
+
+router.get("/private/getOrderByUserID", function (req,res,next) {
+	getOrderByUserID(req,function (err, data) {
+		if (err) { throw err }
+		console.log(data);
+		
+		res.render("dashboard/pages/myorders", { title:"My Orders",orders:data});
+	});
+
 });
 /** */
 export default router;
