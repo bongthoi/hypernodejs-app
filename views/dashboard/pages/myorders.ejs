@@ -81,7 +81,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <strong><%=order.orderNumber%></strong>
                                     </td>
                                     <td class="payment_status">
-                                        <strong><%=order.status%>:
+                                        <strong><%=JSON.parse(order.status).text%>:
                                             <span class="payment_time"><%=order.created%></span>
                                         </strong>
                                     </td>
@@ -109,12 +109,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <strong>Price</strong>
                                     </td>
                                 </tr>
-                              <%for(var item of (order.items)){%>
+                              <%for(var item of order.items){  
+                                %>
                                 <tr>
-                                    <td class="number_stt"><%=item%></td>
+                                    <td class="number_stt"><%=JSON.parse(item).itemNo%></td>
                                     <td class="description_product">adfdf</td>
-                                    <td class="quantity_stt"><%=item.quantity%></td>
-                                    <td class="price_money"><%=item.unitPrice%></td>
+                                    <td class="quantity_stt"><%=JSON.parse(item).quantity%></td>
+                                    <td class="price_money"><%=JSON.parse(item).extendedPrice%></td>
                                 </tr>
                                 <%}%> 
                             </tbody>
