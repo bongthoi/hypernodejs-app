@@ -152,6 +152,7 @@ function isLoggedIn(req, res, next) {
 		res.redirect("/users/login");
 	}
 }
+
 /**cart */
 router.get('/private/productlist', isLoggedIn, function (req, res, next) {
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -160,24 +161,45 @@ router.get('/private/productlist', isLoggedIn, function (req, res, next) {
 	);
 });
 
-router.get('/add/:id', function (req, res, next) {
+router.get('/private/add/:id', isLoggedIn, function (req, res, next) {
 	var productId = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 	var product = products.filter(function (item) {
 		return item.id == productId;
 	});
-	
+
 	cart.add(product[0], productId);
 	req.session.cart = cart;
-	console.log(cart.items[1].item.title);
-	var t=JSON.parse(JSON.stringify(cart));
-
-	console.log(t.items);
-	
-	
-	
 	res.redirect('/private/productlist');
 });
 
+router.get('/private/viewcart', isLoggedIn, function (req, res, next) {
+	if (!req.session.cart) {
+		return res.render('dashboard/pages/viewcart', {
+			products: null
+		});
+	}
+	var cart = new Cart(req.session.cart);
+	res.render('dashboard/pages/viewcart', {
+		title: 'View Cart',
+		products: cart.getItems(),
+		totalPrice: cart.totalPrice
+	});
+});
+
+router.get('/private/remove/:id', isLoggedIn, function (req, res, next) {
+	var productId = req.params.id;
+	var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+	cart.remove(productId);
+	req.session.cart = cart;
+	res.redirect('/private/viewcart');
+});
+
+router.get('/private/deletecart', isLoggedIn, function (req, res, next) {
+	var cart = new Cart(false ? req.session.cart : {});	
+	req.session.cart = cart;
+	res.redirect('/private/viewcart');
+});
 /** */
 export default router;

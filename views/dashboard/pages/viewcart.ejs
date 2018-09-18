@@ -24,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <link rel="stylesheet" href="/dashboard/dist/css/skins/skin-blue.min.css">
   <link href="/css/cart.css" rel="stylesheet" type="text/css">
-  
+
 
 </head>
 
@@ -42,53 +42,61 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Content Header (Page header) -->
           <section class="content-header">
             <h1>
-              Product List
-              <small>more Info</small>
+              <%=title%>
+                <small>more Info</small>
             </h1>
             <!-- Cart Header -->
-            <% include ../partials/cart %>
+
           </section>
 
           <!-- Main content -->
           <section class="content">
 
             <!-- Your Page Content Here -->
-            <%
-            for(var i=0;i<products.length;i++){%>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="thumbnail">
-                    <div class="caption">
-                      <h3>
-                        <%= products[i].title%>
-                      </h3>
-                      <p class="description">
-                        <%=products[0].description %>
-                      </p>
-                      <div class="clearfix">
-                        <div class="price pull-left"><i class="fa fa-tag" aria-hidden="true"></i> <%= products[i].price%> GLO
-                        </div>
-                        <a href="/private/add/<%=products[i].id%>" class="btn btn-default pull-right" role="button"><i class="fa fa-shopping-cart"
-                            aria-hidden="true"></i> Add to cart</a>
+
+            <%if(products.length>0){%>
+              <div class="cart page">
+                <ul class="list-group">
+                    <li class="list-group-item clearfix">
+                        <div class="col-xs-3"><strong>Product Name</strong></div>
+                        <div class="col-xs-2 text-right"><strong>Unit Price</strong></div>
+                        <div class="col-xs-2 text-right"><strong>Quantity</strong></div>
+                        <div class="col-xs-3 text-right"><strong>SubTotal</strong></div>
+                        <div class="col-xs-2 text-right"><strong>Operator</strong></div>
+                      </li>
+                  <%for(var i=0;i<products.length;i++){%>
+                    <li class="list-group-item clearfix">
+                      <div class="col-xs-3">
+                        <strong><%=products[i].item.title%></strong><br/>
+                        <em><%=products[i].item.description%></em>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                      <div class="col-xs-2 text-right">
+                        <span class="badge"><%=products[i].item.price%></span>
+                      </div>
+                      <div class="col-xs-2 text-right">
+                        <span class="badge"><%=products[i].quantity%></span>
+                      </div>
+                      <div class="col-xs-3 text-right">
+                        <%=products[i].price%> GLO
+                      </div>
+                      <div class="col-xs-2 text-right">
+                        <a href="/private/remove/<%=products[i].item.id%>" class="btn btn-danger"></i> Remove</a>
+                      </div>
+                    </li>
+                    <%}%>
+                </ul>
               </div>
-              <%}%>
-                <div class="row">
-                  <div class="col-md-12 z-paging-text-right">
-                    <nav aria-label="Page navigation example">
-                      <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
+              <div class="text-right">
+                <strong>Total: <%=totalPrice%> GLO</strong>
+              </div>
+              <hr>
+              <div class="text-right">
+                <a href="/private/deletecart" type="button" class="btn btn-danger">Delete All</a>
+                <a href="/private/productlist" type="button" class="btn btn-info">Continue Shopping</a>
+                <a href="#" type="button" class="btn btn-success">Checkout</a>
+              </div>              
+              <%}else{%>Your shopping cart is empty.
+                <%}%>
           </section>
           <!-- /.content -->
         </div>
