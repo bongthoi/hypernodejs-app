@@ -1,0 +1,65 @@
+table.item_pay {
+    width: 100%;
+    border: 1px solid #ddd;
+    margin-bottom: 30px;
+ }
+ table.item_pay .payment_item {
+     border-right: 1px solid #ddd; 
+     padding: 10px 10px;
+     text-align: center;
+     line-height: 40px;
+ }
+ table.item_pay .item_pay_1 {
+     border-bottom: 1px solid #ddd;
+ }
+ 
+ 
+ .methods_item {
+     width: 100%;
+     height: 100%;
+     border:1px solid #ddd;
+ }
+ 
+ 
+ .methods_info  {
+     border:1px solid #ddd;
+     max-height: 100%;
+ }
+ .pay-methods {
+     border: 1px solid #ddd;
+ }
+ 
+ .item_pay {
+     float: left;
+     border-right: 1px solid #ddd;
+     line-height: 30px;
+ }
+ .item_pay li {
+     list-style: none;
+     text-align: center;
+     margin-right: 34px;
+ }
+ .pay_info {
+     border-top: 1px solid #ddd;
+ }
+ .pay_info .methods {
+     margin-top: 20px;
+ }
+ .input_methodform input, .title_1 {
+     font-family: 'Nunito', sans-serif;   
+ }
+ .pay_img {
+     height: 50px;
+     max-height: 100%;
+ }
+ .item_pay_link, input {
+     cursor: pointer;
+     text-align: center;
+ }
+ 
+ .fullwidth{
+     width:100%;
+ }
+ ul {
+    list-style: none;
+  }

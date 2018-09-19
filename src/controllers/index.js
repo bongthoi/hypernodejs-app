@@ -181,6 +181,8 @@ router.get('/private/viewcart', isLoggedIn, function (req, res, next) {
 		});
 	}
 	var cart = new Cart(req.session.cart);
+	console.log(cart);
+	console.log(cart.getItems());
 	res.render('dashboard/pages/viewcart', {
 		title: 'View Cart',
 		products: cart.getItems(),
@@ -203,15 +205,34 @@ router.get('/private/deletecart', isLoggedIn, function (req, res, next) {
 	res.redirect('/private/viewcart');
 });
 
+router.get('/private/checkout',isLoggedIn,function(req,res,next){
+	if (!req.session.cart) {
+		return res.render('dashboard/pages/viewcart', {
+			products: null
+		});
+	}
+	var cart = new Cart(req.session.cart);
+	console.log(cart);
+	console.log(cart.getItems());
+	res.render('dashboard/pages/checkout', {
+		title: 'Checkout',
+		products: cart.getItems(),
+		totalPrice: cart.totalPrice
+	});
+});
 
-router.get("/private/getOrderByUserID", function (req,res,next) {
+router.get("/private/getOrderByUserID",isLoggedIn, function (req,res,next) {
 	getOrderByUserID(req,function (err, data) {
-		if (err) { throw err }
-		console.log(data);
+		if (err) { throw err }	
 		
 		res.render("dashboard/pages/myorders", { title:"My Orders",orders:data});
 	});
 
 });
+
+router.post("/private/payment",isLoggedIn,function(req,res,next){
+	console.log("payment...");
+});
+
 /** */
 export default router;

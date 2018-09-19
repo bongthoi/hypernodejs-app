@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>
+    <%= title%>
+  </title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/dashboard/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/dashboard/dist/css/AdminLTE.min.css">
+
+  <link rel="stylesheet" href="/dashboard/dist/css/skins/skin-blue.min.css">
+  <link href="/css/cart.css" rel="stylesheet" type="text/css">
+  <link href="/css/checkout.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Main Header -->
+    <% include ../partials/header %>
+
+      <!-- Left side column. contains the logo and sidebar -->
+      <% include ../partials/leftmenu %>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+          <!-- Content Header (Page header) -->
+          <section class="content-header">
+            <h1>
+              <%=title%>
+                <small>more Info</small>
+            </h1>
+            <!-- Cart Header -->
+
+          </section>
+
+          <!-- Main content -->
+          <section class="content">
+
+            <!-- Your Page Content Here -->
+            <div class="box-border">
+              <div class="row">
+                <div class="col-sm-6">
+                  <%if(products.length>0){%>
+                  <h3 class="checkout-sep"><span>1.Order Review</span></h3>
+                  <table class="table table-bordered table-responsive cart_summary">
+                    <thead>
+                      <tr>
+                        <th><span>Product name</span></th>
+                        <th><span>Unit price</span></th>
+                        <th><span>Qty</span></th>
+                        <th><span>SubTotal</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <%for(var i=0;i<products.length;i++){%>
+                      <tr>
+                        <td class="cart_description">
+                          <p class="product-name"><span><%=products[i].item.title%></span></p>
+                        </td>
+                        <td class="price"><span><%=products[i].item.price%></span></td>
+                        <td class="product-quality"><span><%=products[i].quantity%></span></td>
+                        <td class="price"><span><%=products[i].subtotal%></span></td>
+                      </tr>
+                    <%}%>
+                    </tbody>
+
+                    <tfoot>
+                      <tr>
+                        <td colspan="2"></td>
+                        <td><strong><span>Total</span></strong></td>
+                        <td><strong id="amounttotal"><%=totalPrice%></strong>(<span>GLO</span>)</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <%}else{%>Your shopping cart is empty.
+                    <%}%>
+                </div>
+                <div class="col-sm-6">
+                  <form action="/private/payment" method="POST">
+
+                    <h3 class="checkout-sep"><span>2. Payment Information</span></h3>
+                    <div class="box-border">
+                      <ul>
+                        <li class="row">
+                          <div class="col-sm-12 pay-methods">
+                            <div>
+                              <label>
+                                <div class="item_pay">
+                                  <ul class="item_pay_link">
+                                    <li><span class="w3-bar-item w3-button">Glorious Coin</span></li>
+                                    <li><img alt="" class="pay_img" src="/images/payment/handle.png"></li>
+                                    <li><input name="PaymentMethod.id" type="radio" onclick="openmethods('1')" value="1"
+                                        id="PaymentMethod.id1" checked="checked"></li>
+                                  </ul>
+                                </div>
+                              </label>
+                              <label>
+                                  <div class="item_pay">
+                                    <ul class="item_pay_link">
+                                      <li><span class="w3-bar-item w3-button">BitCoin</span></li>
+                                      <li><img alt="" class="pay_img" src="/images/payment/bitcoin.png"></li>
+                                      <li><input name="PaymentMethod.id" type="radio" onclick="openmethods('2')" value="2"
+                                          id="PaymentMethod.id2"></li>
+                                    </ul>
+                                  </div>
+                                </label>
+                              <label>
+                                <div class="item_pay">
+                                  <ul class="item_pay_link">
+                                    <li><span class="w3-bar-item w3-button">Ethereum</span></li>
+                                    <li><img alt="" class="pay_img" src="/images/payment/ethericon.png"></li>
+                                    <li><input name="PaymentMethod.id" type="radio" onclick="openmethods('3')" value="3"
+                                        id="PaymentMethod.id3"></li>
+                                  </ul>
+                                </div>
+                              </label>
+                            </div>
+                            <div class="col-md-12 pay_info">
+                              <div class="methods" style="display: none" id="1">
+                                <p>Quý khách sẽ thanh toán bằng GloCoin qua cỗng thanh toán Glorious Gateway...</p>
+                              </div>
+                              <div class="methods" style="display: none" id="2">
+                                  <p>Quý khách sẽ thanh toán bằng BitCoin thông qua BitCoin Wallet..</p>
+                                </div>
+                              <div class="methods" style="display: none" id="3">
+                                <p>Quý khách sẽ thanh toán bằng Ether thông qua Ethereum Wallet...</p>
+                              </div>
+                            </div>
+                          </div>
+                          <!--/ [col] -->
+                        </li>
+                        <!--/ .row -->
+                      </ul>
+                    </div>
+                    <div class="box-border">
+                      <ul>
+                        <li class="row">
+                          <div class="col-sm-12">
+                            <button type="submit" class="button">Payment</button>
+                          </div>
+                          <!--/ [col] -->
+                        </li>
+                        <!--/ .row -->
+                      </ul>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Main Footer -->
+        <% include ../partials/footer%>
+
+          <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+          <div class="control-sidebar-bg"></div>
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- REQUIRED JS SCRIPTS -->
+
+  <!-- jQuery 2.2.3 -->
+  <script src="/dashboard/plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="/dashboard/bootstrap/js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/dashboard/dist/js/app.min.js"></script>
+  <script src="/js/checkout.js"></script>
+  <!-- Optionally, you can add Slimscroll and FastClick plugins.
+     Both of these plugins are recommended to enhance the
+     user experience. Slimscroll is required when using the
+     fixed layout. -->
+</body>
+
+</html>

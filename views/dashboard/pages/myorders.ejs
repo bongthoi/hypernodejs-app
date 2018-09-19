@@ -21,6 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="/dashboard/dist/css/AdminLTE.min.css">
 
   <link rel="stylesheet" href="/dashboard/dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="/css/myorders.css" type="text/css">
  
 
 
@@ -52,8 +53,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <section class="content">
 
             <!-- Your Page Content Here -->
-            <div class="row">
-              <div class="col-md-10">
+            <div class="row  background-myorders">
+              
                 <div class="col-md-12">
                     <h3>Orders (<%=orders.length%>)</h3>
     
@@ -112,10 +113,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               <%for(var item of order.items){  
                                 %>
                                 <tr>
-                                    <td class="number_stt"><%=JSON.parse(item).itemNo%></td>
-                                    <td class="description_product">adfdf</td>
+                                    <td class="number_stt"><%=JSON.parse(item).id%></td>
+                                    <td class="description_product"><%=JSON.parse(item).title%></td>
                                     <td class="quantity_stt"><%=JSON.parse(item).quantity%></td>
-                                    <td class="price_money"><%=JSON.parse(item).extendedPrice%></td>
+                                    <td class="price_money"><%=JSON.parse(item).subtotal%></td>
                                 </tr>
                                 <%}%> 
                             </tbody>
@@ -124,12 +125,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         }
                     }%>
                 </div>
-                <div class="col-md-12">
-                    <a class="btn btn-primary" routerLink="/buyer-new-order/{{buyerid}}" role="button">Create New Order</a>
-                </div>
-    
             </div>
-            </div>
+        
 
           </section>
           <!-- /.content -->

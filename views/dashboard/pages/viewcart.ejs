@@ -77,10 +77,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="badge"><%=products[i].quantity%></span>
                       </div>
                       <div class="col-xs-3 text-right">
-                        <%=products[i].price%> GLO
+                        <%=products[i].subtotal%> GLO
                       </div>
                       <div class="col-xs-2 text-right">
-                        <a href="/private/remove/<%=products[i].item.id%>" class="btn btn-danger"></i> Remove</a>
+                        <a href="/private/remove/<%=products[i].item.id%>"><i class="fa fa-trash-o"></i></a>
                       </div>
                     </li>
                     <%}%>
@@ -93,7 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="text-right">
                 <a href="/private/deletecart" type="button" class="btn btn-danger">Delete All</a>
                 <a href="/private/productlist" type="button" class="btn btn-info">Continue Shopping</a>
-                <a href="#" type="button" class="btn btn-success">Checkout</a>
+                <a href="/private/checkout" type="button" class="btn btn-success">Checkout</a>
               </div>              
               <%}else{%>Your shopping cart is empty.
                 <%}%>
