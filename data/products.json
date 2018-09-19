@@ -3,24 +3,56 @@
       "id": 1,
       "title": "Coffee",
       "description": "Coffee is ...",
-      "price": 10
+      "price": 10,
+      "owner":"glorious"
     },
     {
       "id": 2,
       "title": "Coconut",
       "description": "Coconut is ...",
-      "price": 20
+      "price": 20,
+      "owner":"glorious"
     },
     {
       "id": 3,
-      "title": "Coconut Candy",
-      "description": "Coconut Candy is ...",
-      "price": 30
+      "title": "Coffee",
+      "description": "Coffee is ...",
+      "price": 10,
+      "owner":"glorious"
     },
     {
       "id": 4,
+      "title": "Coconut",
+      "description": "Coconut is ...",
+      "price": 20,
+      "owner":"glorious"
+    },
+    {
+      "id": 5,
+      "title": "Coconut Candy",
+      "description": "Coconut Candy is ...",
+      "price": 30,
+      "owner":"vinhsang.com"
+    },
+    {
+      "id": 6,
       "title": "Coconut Coffee",
       "description": "Coconut Coffee is ...",
-      "price": 40
+      "price": 40,
+      "owner":"vinhsang.com"
+    },
+    {
+      "id": 7,
+      "title": "Coconut Candy",
+      "description": "Coconut Candy is ...",
+      "price": 30,
+      "owner":"vinhsang.com"
+    },
+    {
+      "id": 8,
+      "title": "Coconut Coffee",
+      "description": "Coconut Coffee is ...",
+      "price": 40,
+      "owner":"vinhsang.com"
     }
   ]

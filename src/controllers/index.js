@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { createUser, comparePassword, getUserById } from '../services/User';
 import { getAllTransaction } from '../services/transactionService';
-import {getOrderByUserID} from '../services/orderService';
+import {getOrderByUserID,addOrder,deleteOrder} from '../services/orderService';
 import passport from 'passport';
 import User from '../models/user';
 
@@ -17,7 +17,7 @@ let userModel = {};
 
 /** */
 var Cart = require('../services/cart');
-var products = JSON.parse(fs.readFileSync(path.join(path.dirname(require.main.filename), 'data', 'products.json')));
+var productdb = JSON.parse(fs.readFileSync(path.join(path.dirname(require.main.filename), 'data', 'products.json')));
 
 
 /**public */
@@ -158,6 +158,11 @@ function isLoggedIn(req, res, next) {
 router.get('/private/productlist', isLoggedIn, function (req, res, next) {
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 	req.session.cart = cart;
+	
+	let products = productdb.filter(function (item) {
+		return (req.session["passport"]["user"]).includes(item.owner);
+	});
+	
 	res.render('dashboard/pages/productlist', { title: 'Product List', products: products }
 	);
 });
@@ -165,7 +170,7 @@ router.get('/private/productlist', isLoggedIn, function (req, res, next) {
 router.get('/private/add/:id', isLoggedIn, function (req, res, next) {
 	var productId = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
-	var product = products.filter(function (item) {
+	var product = productdb.filter(function (item) {
 		return item.id == productId;
 	});
 
@@ -181,7 +186,7 @@ router.get('/private/viewcart', isLoggedIn, function (req, res, next) {
 		});
 	}
 	var cart = new Cart(req.session.cart);
-	console.log(cart);
+	
 	console.log(cart.getItems());
 	res.render('dashboard/pages/viewcart', {
 		title: 'View Cart',
@@ -212,8 +217,7 @@ router.get('/private/checkout',isLoggedIn,function(req,res,next){
 		});
 	}
 	var cart = new Cart(req.session.cart);
-	console.log(cart);
-	console.log(cart.getItems());
+	
 	res.render('dashboard/pages/checkout', {
 		title: 'Checkout',
 		products: cart.getItems(),
@@ -231,7 +235,21 @@ router.get("/private/getOrderByUserID",isLoggedIn, function (req,res,next) {
 });
 
 router.post("/private/payment",isLoggedIn,function(req,res,next){
-	console.log("payment...");
+
+	addOrder(req,function (err, data) {
+		if (err) { res.render("/dashboard/pages/payment_success",{title:"Payment fail"}); }	
+		console.log(data);
+		res.render("dashboard/pages/payment_success",{title:"Payment success"});
+	});
+});
+
+router.get('/private/deleteorder/:orderNumber', isLoggedIn, function (req, res, next) {
+	var orderNumber = req.params.orderNumber;
+	deleteOrder(orderNumber,function(err,data){
+		if(err){ throw err}
+		res.redirect('/private/getOrderByUserID');
+	});
+	
 });
 
 /** */
