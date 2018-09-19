@@ -18,15 +18,16 @@
     "express-messages": "*",
     "express-session": "*",
     "express-validator": "*",
+    "fs": "*",
     "moment": "^2.22.2",
     "nodemon": "*",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
+    "path": "*",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "fs": "*",
-    "path":"*"
+    "request-promise": "^4.2.2"
+   
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -72,7 +72,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <th class="status">Status</th>
                                     <th class="total">Total</th>
                                     <th class="seller">Seller:
-                                        <span class="seller_name"><%=order.seller%></span>
+                                        <span class="seller_name"><%=(order.seller).slice((order.seller).indexOf("#"))%></span>
                                     </th>
                                 </tr>
                             </thead>
@@ -83,7 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </td>
                                     <td class="payment_status">
                                         <strong><%=JSON.parse(order.status).text%>:
-                                            <span class="payment_time"><%=order.created%></span>
+                                            <span class="payment_time"><%= moment(order.created).format("YYYY-MM-DD HH:mm")%></span>
                                         </strong>
                                     </td>
                                     <td class="total_money">
@@ -91,7 +91,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </td>
                                     <td>
                                         <div class="execute">
-                                                    <a href="/private/deleteorder/<%=order.orderNumber%>">Delete</a>
+                                                    <a class="btn btn-danger" href="/private/deleteorder/<%=order.orderNumber%>">Delete</a>
                                                
                                         </div>
                                     </td>
@@ -107,7 +107,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <strong>Quantity</strong>
                                     </td>
                                     <td class="price">
-                                        <strong>Price</strong>
+                                        <strong>SubTotal</strong>
                                     </td>
                                 </tr>
                               <%for(var item of order.items){  
