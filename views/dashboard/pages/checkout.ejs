@@ -61,6 +61,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <table class="table table-bordered table-responsive cart_summary">
                     <thead>
                       <tr>
+                        <th><span>No</span></th>
                         <th><span>Product name</span></th>
                         <th><span>Unit price</span></th>
                         <th><span>Qty</span></th>
@@ -70,6 +71,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <tbody>
                     <%for(var i=0;i<products.length;i++){%>
                       <tr>
+                        <td class="price"><span><%=i+1%></span></td>
                         <td class="cart_description">
                           <p class="product-name"><span><%=products[i].item.title%></span></p>
                         </td>
@@ -82,7 +84,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     <tfoot>
                       <tr>
-                        <td colspan="2"></td>
+                        <td colspan="3"></td>
                         <td><strong><span>Total</span></strong></td>
                         <td><strong id="amounttotal"><%=totalPrice%></strong>(<span>GLO</span>)</td>
                       </tr>
