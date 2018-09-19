@@ -26,8 +26,8 @@
     "passport-local": "*",
     "path": "*",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
-   
+    "request-promise": "^4.2.2",
+    "sweetalert": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

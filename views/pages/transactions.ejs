@@ -11,7 +11,7 @@
 <body>
 	<div class="container-flui">
 		<% include ../partials/header %>
-			<div class="container">
+			<div class="row rightleft">
 
 				<br>
 				<br>
@@ -65,8 +65,8 @@
 								<%for(var i=0;i<Trans.length;i++){%>
 								<tr>
 									<td><%= Trans[i].transactionId %></td>
-									<td><%= Trans[i].transactionType %></td>
-									<td><%= moment(Trans[i].transactionTimestamp).format("HH:mm:ss")%></td>
+									<td><%= Trans[i].transactionType %> [<%= Trans[i].from %> --> #<%= Trans[i].to %>]</td>
+									<td><%= moment(Trans[i].transactionTimestamp).format("YYYY-MM-DD HH:mm:ss")%></td>
 								</tr>
 								<%}%>
 							</tbody>

@@ -21,3 +21,7 @@
 .bg{
     background-color: white !important;
 }
+.rightleft{
+    margin-left: 30px;
+    margin-right: 30px;
+}

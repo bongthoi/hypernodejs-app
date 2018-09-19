@@ -5,7 +5,7 @@ import fs from 'fs';
 import swal from 'sweetalert'
 import { createUser, comparePassword, getUserById } from '../services/User';
 import { getAllTransaction } from '../services/transactionService';
-import {getOrderByUserID,addOrder,deleteOrder} from '../services/orderService';
+import { getOrderByUserID, addOrder, deleteOrder } from '../services/orderService';
 import passport from 'passport';
 import User from '../models/user';
 
@@ -159,11 +159,11 @@ function isLoggedIn(req, res, next) {
 router.get('/private/productlist', isLoggedIn, function (req, res, next) {
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 	req.session.cart = cart;
-	
+
 	let products = productdb.filter(function (item) {
-		return (req.session["passport"]["user"]).includes(item.owner);
+		return !(req.session["passport"]["user"]).includes(item.owner);
 	});
-	
+
 	res.render('dashboard/pages/productlist', { title: 'Product List', products: products }
 	);
 });
@@ -187,7 +187,7 @@ router.get('/private/viewcart', isLoggedIn, function (req, res, next) {
 		});
 	}
 	var cart = new Cart(req.session.cart);
-	
+
 	console.log(cart.getItems());
 	res.render('dashboard/pages/viewcart', {
 		title: 'View Cart',
@@ -206,19 +206,19 @@ router.get('/private/remove/:id', isLoggedIn, function (req, res, next) {
 });
 
 router.get('/private/deletecart', isLoggedIn, function (req, res, next) {
-	var cart = new Cart(false ? req.session.cart : {});	
+	var cart = new Cart(false ? req.session.cart : {});
 	req.session.cart = cart;
 	res.redirect('/private/viewcart');
 });
 
-router.get('/private/checkout',isLoggedIn,function(req,res,next){
+router.get('/private/checkout', isLoggedIn, function (req, res, next) {
 	if (!req.session.cart) {
 		return res.render('dashboard/pages/viewcart', {
 			products: null
 		});
 	}
 	var cart = new Cart(req.session.cart);
-	
+
 	res.render('dashboard/pages/checkout', {
 		title: 'Checkout',
 		products: cart.getItems(),
@@ -226,31 +226,33 @@ router.get('/private/checkout',isLoggedIn,function(req,res,next){
 	});
 });
 
-router.get("/private/getOrderByUserID",isLoggedIn, function (req,res,next) {
-	getOrderByUserID(req,function (err, data) {
-		if (err) { throw err }			
-		res.render("dashboard/pages/myorders", { title:"My Orders",orders:data, moment: moment});
+router.get("/private/getOrderByUserID", isLoggedIn, function (req, res, next) {
+	getOrderByUserID(req, function (err, data) {
+		if (err) { throw err }
+		res.render("dashboard/pages/myorders", { title: "My Orders", orders: data, moment: moment });
 	});
 
 });
 
-router.post("/private/payment",isLoggedIn,function(req,res,next){
+router.post("/private/payment", isLoggedIn, function (req, res, next) {
 
-	addOrder(req,function (err, data) {
-		if (err) { res.render("/dashboard/pages/payment_success",{title:"Payment fail"}); }	
+	addOrder(req, function (err, data) {
+		if (err) { res.render("/dashboard/pages/payment_success", { title: "Payment fail" }); }
 		console.log(data);
-		res.render("dashboard/pages/payment_success",{title:"Payment success"});
+		var cart = new Cart(false ? req.session.cart : {});
+		req.session.cart = cart;
+		res.render("dashboard/pages/payment_success", { title: "Payment success" });
 	});
 });
 
 router.get('/private/deleteorder/:orderNumber', isLoggedIn, function (req, res, next) {
-	
+
 	var orderNumber = req.params.orderNumber;
-	deleteOrder(orderNumber,function(err,data){
-		if(err){ throw err}
+	deleteOrder(orderNumber, function (err, data) {
+		if (err) { throw err }
 		res.redirect('/private/getOrderByUserID');
 	});
-	
+
 });
 
 /** */
