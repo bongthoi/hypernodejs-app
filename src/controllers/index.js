@@ -6,8 +6,10 @@ import swal from 'sweetalert'
 import { createUser, comparePassword, getUserById } from '../services/User';
 import { getAllTransaction } from '../services/transactionService';
 import { getOrderByUserID, addOrder, deleteOrder } from '../services/orderService';
+import {getProductsByUserID} from '../services/statisticService';
 import passport from 'passport';
 import User from '../models/user';
+
 
 
 /** */
@@ -26,6 +28,8 @@ router.get("/", function (req, res) {
 	res.redirect("/transactions");
 	//res.render('pages/index');
 });
+
+
 
 router.get("/transactions", function (req, res) {
 	getAllTransaction(function (err, data) {
@@ -253,6 +257,23 @@ router.get('/private/deleteorder/:orderNumber', isLoggedIn, function (req, res, 
 		res.redirect('/private/getOrderByUserID');
 	});
 
+});
+
+router.get("/private/getProducts_Statistic",isLoggedIn,function(req,res,next){
+	getProductsByUserID(req,function(err,data){
+		if(err){throw err};
+		var chartQtyData=[['statistic', 'quyantity']];
+		var chartMoneyData=[['statistic', 'money']];
+		for(let item of data){
+			chartQtyData.push([item.title,item.quantity]);
+			chartMoneyData.push([item.title,item.subtotal]);
+		}
+		for(let item of data){
+			
+		}
+		
+		res.render("dashboard/pages/products_statistic",{title:"Products Statistic",products:data,chartQtyData:JSON.stringify(chartQtyData),chartMoneyData:JSON.stringify(chartMoneyData)});
+	});
 });
 
 /** */
