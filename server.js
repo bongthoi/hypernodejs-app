@@ -44,6 +44,15 @@ app.use(expressValidator());
 
 app.use(flash());
 
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+});
+
+
 app.use(function(req, res, next){
 	res.locals.success_message = req.flash('success_message');
 	res.locals.error_message = req.flash('error_message');
