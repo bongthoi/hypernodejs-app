@@ -6,6 +6,7 @@ import swal from 'sweetalert'
 import { createUser, comparePassword, getUserById } from '../services/User';
 import { getAllTransaction } from '../services/transactionService';
 import { getOrderByUserID, addOrder, deleteOrder } from '../services/orderService';
+import ProductService from '../services/productService';
 import {getProductsByUserID} from '../services/statisticService';
 import passport from 'passport';
 import User from '../models/user';
@@ -16,6 +17,7 @@ import User from '../models/user';
 let LocalStrategy = require('passport-local').Strategy;
 let router = express.Router();
 let userModel = {};
+var productService=new ProductService();
 //let TransactionService = new transactionService();
 
 /** */
@@ -268,13 +270,53 @@ router.get("/private/getProducts_Statistic",isLoggedIn,function(req,res,next){
 			chartQtyData.push([item.title,item.quantity]);
 			chartMoneyData.push([item.title,item.subtotal]);
 		}
-		for(let item of data){
-			
-		}
-		
 		res.render("dashboard/pages/products_statistic",{title:"Products Statistic",products:data,chartQtyData:JSON.stringify(chartQtyData),chartMoneyData:JSON.stringify(chartMoneyData)});
 	});
 });
 
+/**test products with postman ok */
+
+router.get("/getallproducts", function (req, res) {
+	productService.getAll(function(err, data) {
+		if (err) {throw err; }
+		console.log(productdb);
+		console.log(data);
+		res.redirect('/');
+	});
+
+});
+
+router.post("/insertproduct", function (req, res) {	
+	productService.insert(req,function(err, data) {
+		if (err) {throw err; }
+		console.log(data);
+		res.redirect('/');
+	});
+
+});
+router.get("/getbyid/:id", function (req, res) {
+	productService.getByID(req,function(err, data) {
+		if (err) {throw err; }
+		console.log(data);
+		res.redirect('/');
+	});
+
+});
+router.put("/update/:id", function (req, res) {
+	productService.update(req,function(err, data) {
+		if (err) {throw err; }
+		console.log(data);
+		res.redirect('/');
+	});
+
+});
+router.delete("/delete/:id", function (req, res) {
+	productService.delete(req,function(err, data) {
+		if (err) {throw err; }
+		console.log(data);
+		res.redirect('/');
+	});
+
+});
 /** */
 export default router;
