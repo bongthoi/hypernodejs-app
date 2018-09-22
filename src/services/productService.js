@@ -21,7 +21,7 @@ module.exports = class ProductService {
         let method = "productService/insert";
         console.log(method);
 
-        let product = new Product(null, req.body.title, req.body.description,req.body.quantity, req.body.price, req.body.owner);
+        let product = new Product(null, req.body.title, req.body.description,req.body.quantity, req.body.price, req.session["passport"]["user"]);
         productRepo.insert(product, function (err, data) {
            callback(err,data.body);
         });
@@ -42,7 +42,7 @@ module.exports = class ProductService {
         let method = "productService/update: " + req.params.id;
         console.log(method);
 
-        let product = new Product(req.params.id, req.body.title, req.body.description,req.body.quantity,req.body.price, req.body.owner);
+        let product = new Product(req.params.id, req.body.title, req.body.description,req.body.quantity,req.body.price, req.session["passport"]["user"]);
         productRepo.update(product, function (err, data) {
             callback(err,data.body);
         });

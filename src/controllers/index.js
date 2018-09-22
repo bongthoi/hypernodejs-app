@@ -295,8 +295,8 @@ router.get("/private/seller/transactions", isLoggedIn, function (req, res) {
 	});
 
 });
-
-router.get("/private/seller/getallproducts", function (req, res) {
+/**products */
+router.get("/private/seller/getallproducts",isLoggedIn, function (req, res) {
 	productService.getAll(function (err, data) {
 		if (err) { throw err; }
 		console.log(productdb);
@@ -306,35 +306,31 @@ router.get("/private/seller/getallproducts", function (req, res) {
 
 });
 
-router.post("/insertproduct", function (req, res) {
+router.post("/private/seller/insertproduct",isLoggedIn, function (req, res) {
 	productService.insert(req, function (err, data) {
 		if (err) { throw err; }
-		console.log(data);
-		res.redirect("/");
+		res.redirect("/private/seller/getallproducts");
 	});
 
 });
-router.get("/getbyid/:id", function (req, res) {
+router.get("/private/seller/getbyid/:id",isLoggedIn, function (req, res) {
 	productService.getByID(req, function (err, data) {
 		if (err) { throw err; }
-		console.log(data);
-		res.redirect("/");
+		res.render("dashboard/seller/productedit",{title:"Product Edit",product:data});
 	});
 
 });
-router.put("/update/:id", function (req, res) {
+router.post("/private/seller/updateproduct/:id",isLoggedIn, function (req, res) {
 	productService.update(req, function (err, data) {
 		if (err) { throw err; }
-		console.log(data);
-		res.redirect("/");
+		res.redirect("/private/seller/getallproducts");
 	});
 
 });
-router.delete("/delete/:id", function (req, res) {
+router.get("/private/seller/deleteproduct/:id",isLoggedIn, function (req, res) {
 	productService.delete(req, function (err, data) {
 		if (err) { throw err; }
-		console.log(data);
-		res.redirect("/");
+		res.redirect("/private/seller/getallproducts");
 	});
 
 });
