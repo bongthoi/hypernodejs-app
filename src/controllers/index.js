@@ -301,7 +301,7 @@ router.get("/private/seller/getallproducts", function (req, res) {
 		if (err) { throw err; }
 		console.log(productdb);
 		console.log(data);
-		res.render("dashboard/seller/productlist", { title: "Product List" });
+		res.render("dashboard/seller/productlist", { title: "Product List",products:data });
 	});
 
 });
