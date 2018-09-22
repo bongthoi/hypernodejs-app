@@ -35,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main Header -->
         <% include ../partials/header %>
             <!-- Left side column. contains the logo and sidebar -->
-            <% include ../partials/leftmenu %>
+            <% include ../partials/buyer/leftmenu %>
 
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
@@ -92,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 </td>
                                                 <td>
                                                     <div>
-                                                        <!-- <a class="btn btn-danger" href="/private/deleteorder/<%=order.orderNumber%>">Delete</a>-->
+                                                        <!-- <a class="btn btn-danger" href="/private/buyer/deleteorder/<%=order.orderNumber%>">Delete</a>-->
                                                         <strong><%=(order.seller).slice((order.seller).indexOf("#"))%></strong>
                                                     </div>
                                                 </td>

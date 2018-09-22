@@ -35,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <% include ../partials/header %>
 
       <!-- Left side column. contains the logo and sidebar -->
-      <% include ../partials/leftmenu %>
+      <% include ../partials/buyer/leftmenu %>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <div class="clearfix">
                         <div class="price pull-left"><i class="fa fa-tag" aria-hidden="true"></i> <%= products[i].price%> GLO
                         </div>
-                        <a href="/private/add/<%=products[i].id%>" class="btn btn-default pull-right" role="button"><i class="fa fa-shopping-cart"
+                        <a href="/private/buyer/add/<%=products[i].id%>" class="btn btn-default pull-right" role="button"><i class="fa fa-shopping-cart"
                             aria-hidden="true"></i> Add to cart</a>
                       </div>
                     </div>

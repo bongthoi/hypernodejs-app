@@ -35,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <% include ../partials/header %>
 
       <!-- Left side column. contains the logo and sidebar -->
-      <% include ../partials/leftmenu %>
+      <% include ../partials/buyer/leftmenu %>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -80,7 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <%=products[i].subtotal%> GLO
                       </div>
                       <div class="col-xs-2 text-right">
-                        <a href="/private/remove/<%=products[i].item.id%>"><i class="fa fa-trash-o"></i></a>
+                        <a href="/private/buyer/remove/<%=products[i].item.id%>"><i class="fa fa-trash-o"></i></a>
                       </div>
                     </li>
                     <%}%>
@@ -91,9 +91,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
               <hr>
               <div class="text-right">
-                <a href="/private/deletecart" type="button" class="btn btn-danger">Delete All</a>
-                <a href="/private/productlist" type="button" class="btn btn-info">Continue Shopping</a>
-                <a href="/private/checkout" type="button" class="btn btn-success">Checkout</a>
+                <a href="/private/buyer/deletecart" type="button" class="btn btn-danger">Delete All</a>
+                <a href="/private/buyer/productlist" type="button" class="btn btn-info">Continue Shopping</a>
+                <a href="/private/buyer/checkout" type="button" class="btn btn-success">Checkout</a>
               </div>              
               <%}else{%>Your shopping cart is empty.
                 <%}%>

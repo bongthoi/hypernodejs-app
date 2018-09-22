@@ -31,14 +31,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main Header -->
     <% include ../partials/header %>
       <!-- Left side column. contains the logo and sidebar -->
-      <% include ../partials/buyer/leftmenu %>
+      <% include ../partials/seller/leftmenu %>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
           <!-- Content Header (Page header) -->
           <section class="content-header">
             <h1>
-                <%= title%>
+              Profile Info
               <small>more Info</small>
             </h1>
             <ol class="breadcrumb">
@@ -55,14 +55,54 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="col-xs-12">
                 <div class="box">
                   <div class="box-header">
-                    <h3 class="box-title"><%= title%></h3>
+                    <h3 class="box-title">Profile</h3>
 
-                    <div class="box-tools">                      
+                    <div class="box-tools">
+                      <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                        <div class="input-group-btn">
+                          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body table-responsive no-padding">
-                   
+                    <table class="table table-hover">
+                      <tbody>
+                        <tr>
+                          <th>ID</th>
+                          <th>Private Key</th>
+                          <th>Company</th>
+                          <th>Type</th>
+                          <th>Status</th>
+
+                        </tr>
+                        <% if(user){ %>
+                          <tr>
+                            <td>
+                              <%= user.userID %>
+                            </td>
+                            <td>
+                              <%= user.userPW %>
+                            </td>
+                            <td>
+                              <%= user.companyName %>
+                            </td>
+                            <td>
+                              <% if(user.$class.includes("Buyer")){%>
+                                Buyer
+                                <%}else{%>
+                                  Seller
+                                  <%}%>
+                            </td>
+                            <td><span class="label label-success">Approved</span></td>
+
+                          </tr>
+                          <% } %>
+                      </tbody>
+                    </table>
                   </div>
                   <!-- /.box-body -->
                 </div>

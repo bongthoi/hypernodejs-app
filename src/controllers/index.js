@@ -7,7 +7,7 @@ import { createUser, comparePassword, getUserById } from "../services/User";
 import { getAllTransaction } from "../services/transactionService";
 import { getOrderByUserID, addOrder, deleteOrder } from "../services/orderService";
 import ProductService from "../services/productService";
-import {getProductsByUserID} from "../services/statisticService";
+import { getProductsByUserID } from "../services/statisticService";
 import passport from "passport";
 import User from "../models/user";
 
@@ -17,7 +17,7 @@ import User from "../models/user";
 let LocalStrategy = require("passport-local").Strategy;
 let router = express.Router();
 let userModel = {};
-var productService=new ProductService();
+var productService = new ProductService();
 //let TransactionService = new transactionService();
 
 /** */
@@ -30,8 +30,6 @@ router.get("/", function (req, res) {
 	res.redirect("/transactions");
 	//res.render("public/index");
 });
-
-
 
 router.get("/transactions", function (req, res) {
 	getAllTransaction(function (err, data) {
@@ -99,24 +97,18 @@ router.get("/users/logout", function (req, res) {
 	res.redirect("/users/login");
 });
 
-/**private */
+
 router.get("/private/dashboard", isLoggedIn, function (req, res) {
-	res.render("dashboard/partials/dashboard");
-});
-
-router.get("/private/profile", isLoggedIn, function (req, res) {
-	console.log(req.session["passport"]["user"]);
-	res.render("dashboard/buyer/profile", { title: "Profile Info" });
-});
-
-router.get("/private/transactions", isLoggedIn, function (req, res) {
-	getAllTransaction(function (err, data) {
-		if (err) { throw err }
-		res.render("dashboard/buyer/transactions", { title: "Transactions List", Trans: data, moment: moment });
-	});
+	if (((req.session.user).$class).includes("Buyer")) {
+		res.render("dashboard/partials/buyer/dashboard");
+	} else {
+		res.render("dashboard/partials/seller/dashboard");
+	}
 
 });
-/** */
+
+
+/**passportjs */
 passport.use(new LocalStrategy({
 	usernameField: "email",
 	passwordField: "password",
@@ -132,6 +124,7 @@ passport.use(new LocalStrategy({
 			comparePassword(password, user.userPW, function (err, isMatch) {
 				if (err) { return done(err); }
 				if (isMatch) {
+					req.session.user = user;
 					return done(null, user, req.flash("success_message", "You have successfully logged in!!"));
 				}
 				else {
@@ -148,6 +141,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (id, done) {
 	getUserById(id, function (err, user) {
+
 		done(err, user);
 	});
 });
@@ -161,8 +155,22 @@ function isLoggedIn(req, res, next) {
 	}
 }
 
+/**BUYER */
+router.get("/private/buyer/profile", isLoggedIn, function (req, res) {
+	console.log("user passport=" + req.session["passport"]["user"]);
+	res.render("dashboard/buyer/profile", { title: "Profile Info" });
+});
+
+router.get("/private/buyer/transactions", isLoggedIn, function (req, res) {
+	getAllTransaction(function (err, data) {
+		if (err) { throw err }
+		res.render("dashboard/buyer/transactions", { title: "Transactions List", Trans: data, moment: moment });
+	});
+
+});
+
 /**cart */
-router.get("/private/productlist", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/productlist", isLoggedIn, function (req, res, next) {
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 	req.session.cart = cart;
 
@@ -174,7 +182,7 @@ router.get("/private/productlist", isLoggedIn, function (req, res, next) {
 	);
 });
 
-router.get("/private/add/:id", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/add/:id", isLoggedIn, function (req, res, next) {
 	var productId = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 	var product = productdb.filter(function (item) {
@@ -183,10 +191,10 @@ router.get("/private/add/:id", isLoggedIn, function (req, res, next) {
 
 	cart.add(product[0], productId);
 	req.session.cart = cart;
-	res.redirect("/private/productlist");
+	res.redirect("/private/buyer/productlist");
 });
 
-router.get("/private/viewcart", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/viewcart", isLoggedIn, function (req, res, next) {
 	if (!req.session.cart) {
 		return res.render("dashboard/buyer/viewcart", {
 			products: null
@@ -202,22 +210,22 @@ router.get("/private/viewcart", isLoggedIn, function (req, res, next) {
 	});
 });
 
-router.get("/private/remove/:id", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/remove/:id", isLoggedIn, function (req, res, next) {
 	var productId = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 
 	cart.remove(productId);
 	req.session.cart = cart;
-	res.redirect("/private/viewcart");
+	res.redirect("/private/buyer/viewcart");
 });
 
-router.get("/private/deletecart", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/deletecart", isLoggedIn, function (req, res, next) {
 	var cart = new Cart(false ? req.session.cart : {});
 	req.session.cart = cart;
-	res.redirect("/private/viewcart");
+	res.redirect("/private/buyer/viewcart");
 });
 
-router.get("/private/checkout", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/checkout", isLoggedIn, function (req, res, next) {
 	if (!req.session.cart) {
 		return res.render("dashboard/buyer/viewcart", {
 			products: null
@@ -232,7 +240,7 @@ router.get("/private/checkout", isLoggedIn, function (req, res, next) {
 	});
 });
 
-router.get("/private/getOrderByUserID", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/getOrderByUserID", isLoggedIn, function (req, res, next) {
 	getOrderByUserID(req, function (err, data) {
 		if (err) { throw err }
 		res.render("dashboard/buyer/myorders", { title: "My Orders", orders: data, moment: moment });
@@ -240,7 +248,7 @@ router.get("/private/getOrderByUserID", isLoggedIn, function (req, res, next) {
 
 });
 
-router.post("/private/payment", isLoggedIn, function (req, res, next) {
+router.post("/private/buyer/payment", isLoggedIn, function (req, res, next) {
 
 	addOrder(req, function (err, data) {
 		if (err) { res.render("/dashboard/pages/payment_success", { title: "Payment fail" }); }
@@ -251,68 +259,80 @@ router.post("/private/payment", isLoggedIn, function (req, res, next) {
 	});
 });
 
-router.get("/private/deleteorder/:orderNumber", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/deleteorder/:orderNumber", isLoggedIn, function (req, res, next) {
 
 	var orderNumber = req.params.orderNumber;
 	deleteOrder(orderNumber, function (err, data) {
 		if (err) { throw err }
-		res.redirect("/private/getOrderByUserID");
+		res.redirect("/private/buyer/getOrderByUserID");
 	});
 
 });
 
-router.get("/private/getProducts_Statistic",isLoggedIn,function(req,res,next){
-	getProductsByUserID(req,function(err,data){
-		if(err){throw err};
-		var chartQtyData=[["statistic", "quyantity"]];
-		var chartMoneyData=[["statistic", "money"]];
-		for(let item of data){
-			chartQtyData.push([item.title,item.quantity]);
-			chartMoneyData.push([item.title,item.subtotal]);
+router.get("/private/buyer/getProducts_Statistic", isLoggedIn, function (req, res, next) {
+	getProductsByUserID(req, function (err, data) {
+		if (err) { throw err };
+		var chartQtyData = [["statistic", "quyantity"]];
+		var chartMoneyData = [["statistic", "money"]];
+		for (let item of data) {
+			chartQtyData.push([item.title, item.quantity]);
+			chartMoneyData.push([item.title, item.subtotal]);
 		}
-		res.render("dashboard/buyer/products_statistic",{title:"Products Statistic",products:data,chartQtyData:JSON.stringify(chartQtyData),chartMoneyData:JSON.stringify(chartMoneyData)});
+		res.render("dashboard/buyer/products_statistic", { title: "Products Statistic", products: data, chartQtyData: JSON.stringify(chartQtyData), chartMoneyData: JSON.stringify(chartMoneyData) });
 	});
 });
 
-/**test products with postman ok */
+/**SELLER */
+router.get("/private/seller/profile", isLoggedIn, function (req, res) {
+	console.log("user passport=" + req.session["passport"]["user"]);
+	res.render("dashboard/seller/profile", { title: "Profile Info" });
+});
 
-router.get("/getallproducts", function (req, res) {
-	productService.getAll(function(err, data) {
-		if (err) {throw err; }
+router.get("/private/seller/transactions", isLoggedIn, function (req, res) {
+	getAllTransaction(function (err, data) {
+		if (err) { throw err }
+		res.render("dashboard/seller/transactions", { title: "Transactions List", Trans: data, moment: moment });
+	});
+
+});
+
+router.get("/private/seller/getallproducts", function (req, res) {
+	productService.getAll(function (err, data) {
+		if (err) { throw err; }
 		console.log(productdb);
 		console.log(data);
-		res.redirect("/");
+		res.render("dashboard/seller/productlist", { title: "Product List" });
 	});
 
 });
 
-router.post("/insertproduct", function (req, res) {	
-	productService.insert(req,function(err, data) {
-		if (err) {throw err; }
+router.post("/insertproduct", function (req, res) {
+	productService.insert(req, function (err, data) {
+		if (err) { throw err; }
 		console.log(data);
 		res.redirect("/");
 	});
 
 });
 router.get("/getbyid/:id", function (req, res) {
-	productService.getByID(req,function(err, data) {
-		if (err) {throw err; }
+	productService.getByID(req, function (err, data) {
+		if (err) { throw err; }
 		console.log(data);
 		res.redirect("/");
 	});
 
 });
 router.put("/update/:id", function (req, res) {
-	productService.update(req,function(err, data) {
-		if (err) {throw err; }
+	productService.update(req, function (err, data) {
+		if (err) { throw err; }
 		console.log(data);
 		res.redirect("/");
 	});
 
 });
 router.delete("/delete/:id", function (req, res) {
-	productService.delete(req,function(err, data) {
-		if (err) {throw err; }
+	productService.delete(req, function (err, data) {
+		if (err) { throw err; }
 		console.log(data);
 		res.redirect("/");
 	});
