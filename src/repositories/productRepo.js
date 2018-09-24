@@ -71,6 +71,27 @@ module.exports = class ProductRepo {
             return callback(err, data);
         });
     };
+
+    getByOwner(_owner, callback) {
+        let method = "productRepo/getByOwner/owner: " + _owner;
+        console.log(method);
+
+        let product = new Product();
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "ByOwner/" + _owner,
+            json: true
+        };
+
+        return rq(options, function (err, data) {
+            return callback(err, data);
+        });
+    };
+
     update(_product, callback) {
         let method = "productRepo/update/productID: " + _product;
         console.log(method);

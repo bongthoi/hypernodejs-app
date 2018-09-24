@@ -3,6 +3,7 @@ import moment from "moment";
 import path from "path";
 import fs from "fs";
 import swal from "sweetalert"
+import Cart from '../services/cart';
 import { createUser, comparePassword, getUserById } from "../services/User";
 import { getAllTransaction } from "../services/transactionService";
 import { getOrderByUserID, addOrder, deleteOrder } from "../services/orderService";
@@ -13,17 +14,11 @@ import User from "../models/user";
 
 
 
-/** */
+/**variable declare */
 let LocalStrategy = require("passport-local").Strategy;
 let router = express.Router();
 let userModel = {};
 var productService = new ProductService();
-//let TransactionService = new transactionService();
-
-/** */
-var Cart = require("../services/cart");
-var productdb = JSON.parse(fs.readFileSync(path.join(path.dirname(require.main.filename), "data", "products.json")));
-
 
 /**public */
 router.get("/", function (req, res) {
@@ -173,25 +168,29 @@ router.get("/private/buyer/transactions", isLoggedIn, function (req, res) {
 router.get("/private/buyer/productlist", isLoggedIn, function (req, res, next) {
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 	req.session.cart = cart;
-
-	let products = productdb.filter(function (item) {
-		return !(req.session["passport"]["user"]).includes(item.owner);
-	});
-
-	res.render("dashboard/buyer/productlist", { title: "Product List", products: products }
-	);
+	
+	productsdb(function(err,data){
+		if(err){throw err;}
+		
+		let products = data.filter(function (item) {
+			return !(req.session["passport"]["user"]).includes(item.owner);
+		});	
+		res.render("dashboard/buyer/productlist", { title: "Product List", products: products});
+	});	
 });
 
 router.get("/private/buyer/add/:id", isLoggedIn, function (req, res, next) {
 	var productId = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
-	var product = productdb.filter(function (item) {
-		return item.id == productId;
-	});
-
+	productsdb(function(err,data){
+		if(err){throw err;}
+		let product=data.filter(function(item){
+			return item.id == productId;
+		});
 	cart.add(product[0], productId);
 	req.session.cart = cart;
 	res.redirect("/private/buyer/productlist");
+	});	
 });
 
 router.get("/private/buyer/viewcart", isLoggedIn, function (req, res, next) {
@@ -299,7 +298,15 @@ router.get("/private/seller/transactions", isLoggedIn, function (req, res) {
 router.get("/private/seller/getallproducts",isLoggedIn, function (req, res) {
 	productService.getAll(function (err, data) {
 		if (err) { throw err; }
-		console.log(productdb);
+		console.log(data);
+		res.render("dashboard/seller/productlist", { title: "Product List",products:data });
+	});
+
+});
+
+router.get("/private/seller/getProductByOwner",isLoggedIn, function (req, res) {
+	productService.getByOwner(req,function (err, data) {
+		if (err) { throw err; }
 		console.log(data);
 		res.render("dashboard/seller/productlist", { title: "Product List",products:data });
 	});
@@ -309,7 +316,7 @@ router.get("/private/seller/getallproducts",isLoggedIn, function (req, res) {
 router.post("/private/seller/insertproduct",isLoggedIn, function (req, res) {
 	productService.insert(req, function (err, data) {
 		if (err) { throw err; }
-		res.redirect("/private/seller/getallproducts");
+		res.redirect("/private/seller/getProductByOwner");
 	});
 
 });
@@ -323,16 +330,38 @@ router.get("/private/seller/getbyid/:id",isLoggedIn, function (req, res) {
 router.post("/private/seller/updateproduct/:id",isLoggedIn, function (req, res) {
 	productService.update(req, function (err, data) {
 		if (err) { throw err; }
-		res.redirect("/private/seller/getallproducts");
+		res.redirect("/private/seller/getProductByOwner");
 	});
 
 });
 router.get("/private/seller/deleteproduct/:id",isLoggedIn, function (req, res) {
 	productService.delete(req, function (err, data) {
 		if (err) { throw err; }
-		res.redirect("/private/seller/getallproducts");
+		res.redirect("/private/seller/getProductByOwner");
 	});
 
 });
+/**statistic */
+router.get("/private/seller/getProducts_Statistic", isLoggedIn, function (req, res, next) {
+	productService.getByOwner(req, function (err, data) {
+		if (err) { throw err };
+		var chartQtyData = [["statistic", "quyantity"]];
+		var chartMoneyData = [["statistic", "money"]];
+		for (let item of data) {
+			chartQtyData.push([item.title, item.quantity]);
+			chartMoneyData.push([item.title, item.quantity*item.price]);
+		}
+		res.render("dashboard/seller/products_statistic", { title: "Products Statistic", products: data, chartQtyData: JSON.stringify(chartQtyData), chartMoneyData: JSON.stringify(chartMoneyData) });
+	});
+});
+
+/**database */
+function productsdb(callback){
+	productService.getAll(function (err, data) {
+		if(err){throw err;};
+		return callback(null,data);
+	});
+}
+
 /** */
 export default router;

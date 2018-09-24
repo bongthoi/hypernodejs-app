@@ -4,10 +4,11 @@ import Transaction from '../models/transaction';
 import fs from 'fs';
 import path from 'path';
 import moment from 'moment';
+import ProductService from "../services/productService";
 
 var productdb = JSON.parse(fs.readFileSync(path.join(path.dirname(require.main.filename), 'data', 'products.json')));
 var TransactionRepo = new transactionRepo();
-
+var productService = new ProductService();
 
 
 export const getAllTransaction = (callback) => {
@@ -16,10 +17,9 @@ export const getAllTransaction = (callback) => {
         .then(data => {
             if (data != null) {
                 
-
                 for(let tran of data){
                     if((tran.transactionType).includes("CreateOrder")){
-
+                        
                         let products = productdb.filter(function (item) {
                             return !(tran.participantInvoking).includes(item.owner);
                         });
@@ -31,7 +31,7 @@ export const getAllTransaction = (callback) => {
 
                // console.log(trans);
 
-                return callback(null, trans.sort(date_sort_asc));
+                return callback(null, trans);
             } else {
                 return callback(null);
             }
@@ -43,16 +43,10 @@ export const getAllTransaction = (callback) => {
 
 }
 
-var date_sort_asc = function compare(a, b) {
-    var dateA = new Date(a.date);
-    var dateB = new Date(b.date);
-    return dateA - dateB;
-  };
-  
-  var date_sort_desc = function (date1, date2) {
-    // This is a comparison function that will result in dates being sorted in
-    // DESCENDING order.
-    if (date1 > date2) return -1;
-    if (date1 < date2) return 1;
-    return 0;
-  };
+/**database */
+function productsdb(callback){
+	productService.getAll(function (err, data) {
+		if(err){throw err;};
+		return callback(null,data);
+	});
+}
