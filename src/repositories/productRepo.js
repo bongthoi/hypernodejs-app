@@ -136,4 +136,50 @@ module.exports = class ProductRepo {
             return callback(err, data);
         });
     };
+
+    getAAById(_productID) {
+        let method = "productRepo/getByID/productID: " + _productID;
+        console.log(method);
+
+        let product = new Product();
+        const options = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "/" + _productID,
+            json: true
+        };
+
+        return rq(options, function (err, data) {
+            return data;
+        });
+    };
+
+    insertAA(_product) {
+        let method = "productRepo/insert";
+        console.log(method);
+
+        let product = new Product(null, _product.title, _product.description, _product.quantity, _product.price, _product.owner);
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class,
+            body: {
+                "title": product.title,
+                "description": product.description,
+                "quantity": product.quantity,
+                "price": product.price,
+                "owner": product.owner
+            },
+            json: true
+        };
+        return rq(options, function (err, data) {
+            return data;
+        });
+    };
 }

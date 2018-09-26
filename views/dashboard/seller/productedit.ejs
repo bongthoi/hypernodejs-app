@@ -78,16 +78,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <form action="/private/seller/updateproduct/<%=product[0].id%>" method="POST">
                   <div class="col-xs-12">
                     <div class="form-group">
-                      <input type="text" name="title" placeholder="Title" value="<%= product[0].title%>" class="form-control" autofocus>
+                      <label for="title">Name</label>
+                      <input type="text" name="title" id="title" placeholder="Title" value="<%= product[0].title%>" class="form-control" readonly>
                     </div>
                     <div class="form-group">
-                      <input type="text" name="description" placeholder="Description" value="<%= product[0].description%>" class="form-control">
+                      <label for="description">Description</label>
+                      <input type="text" name="description" id="description" placeholder="Description" value="<%= product[0].description%>" class="form-control" readonly>
                     </div>
                     <div class="form-group">
-                      <input type="text" name="price" placeholder="Price" value="<%= product[0].price%>" class="form-control">
+                      <label for="price">Quantity</label>
+                      <input type="text" name="price" id="price" placeholder="Price" value="<%= product[0].price%>" class="form-control">
                     </div>
                     <div class="form-group">
-                      <input type="text" name="quantity" placeholder="Quantity" value="<%= product[0].quantity%>" class="form-control">
+                      <label for="quantity">Quantity</label>
+                      <input type="text" name="quantity" id="quantity" placeholder="Quantity" value="<%= product[0].quantity%>" class="form-control" autofocus>
                     </div>
                   </div>
                   <div class="col-xs-12">

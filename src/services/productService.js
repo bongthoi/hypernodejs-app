@@ -1,6 +1,6 @@
 'use strict';
-var ProductRepo = require('../repositories/productRepo');
-var Product = require('../models/product');
+import ProductRepo from '../repositories/productRepo';
+import Product from '../models/product';
 
 
 /** */
@@ -46,7 +46,7 @@ module.exports = class ProductService {
         });
 
     };
- //   (order.seller).slice((order.seller).indexOf("#")+1)
+
     update(req, callback) {
         let method = "productService/update: " + req.params.id;
         console.log(method);
