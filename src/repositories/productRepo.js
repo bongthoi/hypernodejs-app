@@ -157,27 +157,21 @@ module.exports = class ProductRepo {
         });
     };
 
-    insertAA(_product) {
-        let method = "productRepo/insert";
+    getByTitleandOwner(_title,_owner) {
+        let method = "productRepo/getByTitleandOwner/owner: " + _owner;
         console.log(method);
 
-        let product = new Product(null, _product.title, _product.description, _product.quantity, _product.price, _product.owner);
+        let product = new Product();
         const options = {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class,
-            body: {
-                "title": product.title,
-                "description": product.description,
-                "quantity": product.quantity,
-                "price": product.price,
-                "owner": product.owner
-            },
+            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "ByTitleandOwner/" +_title+"/" + _owner,
             json: true
         };
+
         return rq(options, function (err, data) {
             return data;
         });
