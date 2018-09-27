@@ -86,12 +86,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <%if(products.length>0){
                           let total=0;
                           let Qty=0;
+                          let stt=0;
                           for(let prod of products){                            
                             total+=prod.subtotal;                            
                             Qty+=prod.quantity;
+                            stt=stt+1;
                             %>
                           <tr>
-                            <td><%=prod.id%></td>
+                            <td><%=stt%></td>
                             <td><%=prod.title%></td>
                             <td><%=prod.description%></td>
                             <td><%=prod.price%></td>

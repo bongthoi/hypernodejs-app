@@ -86,13 +86,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <input type="text" name="description" id="description" placeholder="Description" value="<%= product[0].description%>" class="form-control" readonly>
                     </div>
                     <div class="form-group">
-                      <label for="price">Quantity</label>
-                      <input type="text" name="price" id="price" placeholder="Price" value="<%= product[0].price%>" class="form-control">
-                    </div>
-                    <div class="form-group">
                       <label for="quantity">Quantity</label>
                       <input type="text" name="quantity" id="quantity" placeholder="Quantity" value="<%= product[0].quantity%>" class="form-control" autofocus>
                     </div>
+                    <div class="form-group">
+                      <label for="price">Price</label>
+                      <input type="text" name="price" id="price" placeholder="Price" value="<%= product[0].price%>" class="form-control">
+                    </div>                    
                   </div>
                   <div class="col-xs-12">
                     <a href="/private/seller/getProductByOwner" class="btn btn-secondary">Close</button>

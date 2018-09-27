@@ -54,7 +54,7 @@ export const addOrder = async (req, callback) => {
             console.log("Upadate success!!!");
         });
 
-        let prod = await productRepo.getByTitleandOwner(item.item.title, companyName);
+        /* let prod = await productRepo.getByTitleandOwner(item.item.title, companyName);
 
 
         if (prod.length > 0) {
@@ -72,7 +72,7 @@ export const addOrder = async (req, callback) => {
                 if (err) { return console.log(err); }
                 console.log("insert success!!!");
             });
-        }
+        } */
 
 
 

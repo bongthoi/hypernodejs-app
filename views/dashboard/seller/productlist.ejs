@@ -88,10 +88,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <th colspan="2">Operator</th>
                     </tr>
                     <%if(products.length>0){
-                          for(let prod of products){%>
+                          let stt=0;
+                          for(let prod of products){
+                            stt=stt+1;
+                            %>
                             <tr>
                               <td>
-                                <%=prod.id%>
+                                <%=stt%>
                               </td>
                               <td>
                                 <%=prod.title%>
