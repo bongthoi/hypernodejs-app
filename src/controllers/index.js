@@ -251,7 +251,7 @@ router.post("/private/buyer/payment", isLoggedIn, function (req, res, next) {
 
 	addOrder(req, function (err, data) {
 		if (err) { res.render("/dashboard/pages/payment_success", { title: "Payment fail" }); }
-		console.log(data);
+		//console.log(data);
 		var cart = new Cart(false ? req.session.cart : {});
 		req.session.cart = cart;
 		res.render("dashboard/buyer/payment_success", { title: "Payment success" });
