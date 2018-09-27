@@ -69,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<%if(Trans!=null){%>
 										<tbody>
 											<%for(var i=0;i<Trans.length;i++){%>
-												<tr>
+												<tr <%if(i==0){%> style="color: #3498db;"<%}%>>
 													<td>
 														<%= Trans[i].transactionId %>
 													</td>

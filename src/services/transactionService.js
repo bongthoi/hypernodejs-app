@@ -1,4 +1,5 @@
 "use strict";
+import Date_utility from '../utilities/date_utility';
 import transactionRepo from "../repositories/transactionRepo";
 import Transaction from '../models/transaction';
 import fs from 'fs';
@@ -27,11 +28,11 @@ export const getAllTransaction = async (callback) => {
                             return !(tran.participantInvoking).includes(item.owner);
                         });
                         //console.log(products[0].owner);
-                        trans.push(new Transaction(tran.transactionId,tran.transactionType,(tran.participantInvoking).slice((tran.participantInvoking).indexOf("#")),products[0].owner,moment(tran.transactionTimestamp).format("YYYY-MM-DD HH:mm:ss")));
+                        trans.push(new Transaction(tran.transactionId,tran.transactionType,(tran.participantInvoking).slice((tran.participantInvoking).indexOf("#")),products[0].owner,tran.transactionTimestamp));
                     }                    
                 }
                // console.log(trans);
-                return callback(null, trans);
+                return callback(null, trans.sort(sort_desc_date));
             } else {
                 return callback(null);
             }
@@ -49,4 +50,8 @@ let productsdb= (callback)=>{
 		return callback(null,data);
     });
     
+}
+
+function sort_desc_date (left, right) {
+    return moment.utc(right.transactionTimestamp).diff(moment.utc(left.transactionTimestamp))
 }
