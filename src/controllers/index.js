@@ -22,9 +22,10 @@ var productService = new ProductService();
 
 /**public */
 router.get("/", function (req, res) {
-	res.redirect("/transactions");
-	//res.render("public/index");
+	//res.redirect("/transactions");
+	res.render("public/index",{title:"Home"});
 });
+
 
 router.get("/transactions", function (req, res) {
 	getAllTransaction(function (err, data) {

@@ -1,21 +1,61 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="">
 <head>
-	<title><%=title%></title>
-	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-	<link href="/css/header.css" rel="stylesheet" type="text/css">
-	<link href="/css/footer.css" rel="stylesheet" type="text/css">
-	<link href="/css/transaction.css" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title><%=title%> | Glorious Corp</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="/public/images/favicon.png" />
+
+    <!--Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:200,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900|Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
+
+    <!--Bootstrap Stylesheet-->
+    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.css">
+    <!--Font Awesome Stylesheet-->
+    <link rel="stylesheet" type="text/css" href="/public/css/font-awesome.css">
+    <!--Popup Stylesheet-->
+    <link rel="stylesheet" type="text/css" href="/public/css/popup.css">
+    <!--Animate Stylesheet-->
+    <link rel="stylesheet" type="text/css" href="/public/css/animate.css">
+    <!--Country Flags Styleshee -->
+    <link rel="stylesheet" type="text/css" href="/public/css/flags.css">
+    <!--Main Stylesheet-->
+    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+    <!--Responsive Stylesheet-->
+    <link rel="stylesheet" type="text/css" href="/public/css/responsive.css">
+    <!-- Style Color Switcher Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="/public/css/switcher-colors.css">
+	<link rel="stylesheet" type="text/css" href="/css/transaction.css">
 </head>
 
 <body>
-	<div class="container-flui">
-		<% include ../partials/header %>
-			<div class="row rightleft">
+    <div class="site-preloader">
+        <!--Satrt Site Preloader-->
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+    <!--End Site preloader-->
 
-				<br>
-				<br>
-				<br>
+    <div class="site-wrapper">
+        <!-- Start Site Wrapper -->
+        <% include ../partials/header %>
+        <!--End Header-->
+
+
+
+
+
+        <div class="clearfix"></div>
+        <section class="service">
+            <!--Start Service Section-->
+            <div class="container">
 				<div class="row">
 					<div class="col-md-6">
 						<img src="/images/model.gif">
@@ -89,8 +129,32 @@
 					</div>
 				</div>
 			</div><br><br><br><br><br><br><br><br>
+		</section>
+			<div class="clearfix"></div>
 			<% include ../partials/footer %>
-	</div>
-</body>
-
-</html>
+			<!--End Footer Section-->
+        
+	
+		</div>
+		<!-- End Site Wrapper -->
+	
+		<!-- jQuery JS -->
+		<script src="/public/js/jquery.min.js"></script>
+		<!-- Waypoints JS -->
+		<script src="/public/js/waypoints.js"></script>
+		<!-- Magnific JS -->
+		<script src="/public/js/jquery.magnific-popup.js"></script>
+		<!-- Country Select JS -->
+		<script src="/public/js/jquery.flagstrap.js"></script>
+		<!-- Counterup JS -->
+		<script src="/public/js/jquery.counterup.min.js"></script>
+		<!-- Bootstrap JS -->
+		<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+		<!-- Main JS -->
+		<script type="text/javascript" src="/public/js/main.js"></script>
+	</body>
+	
+	
+	<!-- Mirrored from idealbrothers.thesoftking.com/HTML/shost/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 19 May 2017 06:57:51 GMT -->
+	</html>
+	
