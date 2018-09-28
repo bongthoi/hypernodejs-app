@@ -1,17 +1,4 @@
 
-.menubar-color{
-    background-color: green;
-   
-}
-.mautrang{
-    color: white!important;
-}
-.mautrang>li>a{
-    color: white!important;
-}
-header{
-    margin-bottom: 50px;
-}
-.canhphai{
-    padding-left: 700px!important;
+.logo{
+    height: 95px!important;
 }
