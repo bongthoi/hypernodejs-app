@@ -2,14 +2,15 @@ import express from "express";
 import moment from "moment";
 import path from "path";
 import fs from "fs";
-import swal from "sweetalert"
+import swal from "sweetalert";
+import passport from "passport";
 import Cart from '../services/cart';
 import { createUser, comparePassword, getUserById } from "../services/User";
 import { getAllTransaction } from "../services/transactionService";
 import { getOrderByUserID, addOrder, deleteOrder } from "../services/orderService";
 import ProductService from "../services/productService";
 import { getProductsByUserID } from "../services/statisticService";
-import passport from "passport";
+import EtherService from '../services/etherService';
 import User from "../models/user";
 
 
@@ -19,6 +20,7 @@ let LocalStrategy = require("passport-local").Strategy;
 let router = express.Router();
 let userModel = {};
 var productService = new ProductService();
+var etherService=new EtherService();
 
 /**public */
 router.get("/", function (req, res) {
@@ -363,6 +365,23 @@ function productsdb(callback){
 		return callback(null,data);
 	});
 }
+
+/**ETHER GATEWAY PAYMENT */
+router.get("/private/buyer/getBalanceForm",isLoggedIn,(req,res)=>{
+	let etherAccount=null;
+	res.render("dashboard/buyer/check_ether_balance",{title:"Check Balance",etherAccount:etherAccount});
+});
+
+router.post("/private/buyer/getBalance",isLoggedIn,async (req,res)=>{
+	let etherAccount=null;
+		etherAccount=await etherService.getBalance(req.body.address);			
+		if(etherAccount.errCode==500){
+			req.flash("error_message", "the Address is not exist!!!");
+			res.redirect("/private/buyer/getBalanceForm");	
+		}else{
+			res.render("dashboard/buyer/check_ether_balance",{title:"Check Balance",etherAccount:etherAccount});	
+		}
+});
 
 /** */
 export default router;
