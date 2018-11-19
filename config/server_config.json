@@ -1,5 +1,4 @@
 {
     "server_ip":"http://localhost",
-    "server_port":"4000",
-    "server_url":"/api/"
+    "server_port":"6000"
 }
