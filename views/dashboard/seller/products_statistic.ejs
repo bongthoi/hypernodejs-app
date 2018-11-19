@@ -110,7 +110,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td>
                         <%=prod.quantity%>
                       </td>
-                      <td><span><%=subtotal%> </span><strong> (GLO) </strong></td>
+                      <td><span><%=subtotal%> </span><strong> (<%=symbol%>) </strong></td>
                     </tr>
                     <%}%>
                     <tr>
@@ -123,7 +123,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <td colspan="4"></td>
                       <td><strong>Total: </strong></td>
                       <td><strong class="label label-success">
-                          <%=total%> (GLO) </strong></td>
+                          <%=total%> (<%=symbol%>) </strong></td>
                     </tr>
                     <%}%>
                   </tbody>

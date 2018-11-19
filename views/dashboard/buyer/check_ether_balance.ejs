@@ -48,10 +48,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </section>
 
           <!-- Main content -->
-          <section class="content">
+          <section class="content">             
               <div class="row">
                   <%include ../../partials/errors %>
-              </div>
+              </div>             
             <!-- Your Page Content Here -->            
             <div class="row">
               <div class="col-xs-12">
@@ -86,7 +86,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <%=etherAccount.ethBalance%><strong> (ETH) </strong>
                             </td>
                             <td>
-                                <%=etherAccount.tokenBalance%><strong> (GLO) </strong>
+                                <%=etherAccount.tokenBalance%><strong> (<%=symbol%>) </strong>
                             </td>
                            
                             <td><span class="label label-success">Approved</span></td>

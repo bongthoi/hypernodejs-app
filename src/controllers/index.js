@@ -3,6 +3,7 @@ import moment from "moment";
 import path from "path";
 import fs from "fs";
 import swal from "sweetalert";
+import wallet_config from '../../config/wallet_config.json';
 import passport from "passport";
 import Cart from '../services/cart';
 import { createUser, comparePassword, getUserById } from "../services/User";
@@ -20,12 +21,12 @@ let LocalStrategy = require("passport-local").Strategy;
 let router = express.Router();
 let userModel = {};
 var productService = new ProductService();
-var etherService=new EtherService();
+var etherService = new EtherService();
 
 /**public */
 router.get("/", function (req, res) {
 	//res.redirect("/transactions");
-	res.render("public/index",{title:"Home"});
+	res.render("public/index", { title: "Home" });
 });
 
 
@@ -171,29 +172,29 @@ router.get("/private/buyer/transactions", isLoggedIn, function (req, res) {
 router.get("/private/buyer/productlist", isLoggedIn, function (req, res, next) {
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
 	req.session.cart = cart;
-	
-	productsdb(function(err,data){
-		if(err){throw err;}
-		
+
+	productsdb(function (err, data) {
+		if (err) { throw err; }
+
 		let products = data.filter(function (item) {
 			return !(req.session["passport"]["user"]).includes(item.owner);
-		});	
-		res.render("dashboard/buyer/productlist", { title: "Product List", products: products});
-	});	
+		});
+		res.render("dashboard/buyer/productlist", { title: "Product List", products: products ,symbol:wallet_config.symbol});
+	});
 });
 
 router.get("/private/buyer/add/:id", isLoggedIn, function (req, res, next) {
 	var productId = req.params.id;
 	var cart = new Cart(req.session.cart ? req.session.cart : {});
-	productsdb(function(err,data){
-		if(err){throw err;}
-		let product=data.filter(function(item){
+	productsdb(function (err, data) {
+		if (err) { throw err; }
+		let product = data.filter(function (item) {
 			return item.id == productId;
 		});
-	cart.add(product[0], productId);
-	req.session.cart = cart;
-	res.redirect("/private/buyer/productlist");
-	});	
+		cart.add(product[0], productId);
+		req.session.cart = cart;
+		res.redirect("/private/buyer/productlist");
+	});
 });
 
 router.get("/private/buyer/viewcart", isLoggedIn, function (req, res, next) {
@@ -208,7 +209,8 @@ router.get("/private/buyer/viewcart", isLoggedIn, function (req, res, next) {
 	res.render("dashboard/buyer/viewcart", {
 		title: "View Cart",
 		products: cart.getItems(),
-		totalPrice: cart.totalPrice
+		totalPrice: cart.totalPrice,
+		symbol:wallet_config.symbol
 	});
 });
 
@@ -238,27 +240,58 @@ router.get("/private/buyer/checkout", isLoggedIn, function (req, res, next) {
 	res.render("dashboard/buyer/checkout", {
 		title: "Checkout",
 		products: cart.getItems(),
-		totalPrice: cart.totalPrice
+		totalPrice: cart.totalPrice,
+		symbol:wallet_config.symbol
 	});
 });
 
 router.get("/private/buyer/getOrderByUserID", isLoggedIn, function (req, res, next) {
 	getOrderByUserID(req, function (err, data) {
 		if (err) { throw err }
-		res.render("dashboard/buyer/myorders", { title: "My Orders", orders: data, moment: moment });
+		res.render("dashboard/buyer/myorders", { title: "My Orders", orders: data,symbol:wallet_config.symbol ,moment: moment });
 	});
 
 });
 
-router.post("/private/buyer/payment", isLoggedIn, function (req, res, next) {
+router.post("/private/buyer/payment", isLoggedIn, async function (req, res, next) {
 
-	addOrder(req, function (err, data) {
-		if (err) { res.render("/dashboard/pages/payment_success", { title: "Payment fail" }); }
-		//console.log(data);
-		var cart = new Cart(false ? req.session.cart : {});
-		req.session.cart = cart;
-		res.render("dashboard/buyer/payment_success", { title: "Payment success" });
-	});
+	req.checkBody("vscaddressfrom", "Address is required").notEmpty();
+	req.checkBody("vscprivatekey", "Private key is required").notEmpty();
+	let errors = req.validationErrors();
+	if (errors) {
+		var cart = new Cart(req.session.cart);
+
+		res.render("dashboard/buyer/checkout", {
+			title: "Checkout",
+			products: cart.getItems(),
+			totalPrice: cart.totalPrice,
+			errors: errors,
+			symbol:wallet_config.symbol
+		});
+	} else {
+
+		let balance = await etherService.getBalance(req.body.vscaddressfrom);
+		if (Number(balance.tokenBalance) >= Number(req.session.cart.totalPrice)) {
+			try {
+				let result = await etherService.transferFrom(req.body.vscaddressfrom, req.body.vscprivatekey, wallet_config.receiverAccount, Number(req.session.cart.totalPrice));
+				console.log("Gateway Payment=" + JSON.stringify(result));
+				addOrder(req, function (err, data) {
+					if (err) { res.render("/dashboard/pages/payment_success", { title: "Payment fail", msg: "Order is failed" }); }
+					//console.log(data);
+					var cart = new Cart(false ? req.session.cart : {});
+					req.session.cart = cart;
+					res.render("dashboard/buyer/payment_success", { title: "Payment success", msg: "Payment is successfull" });
+				});
+			} catch (error) {
+				res.render("dashboard/buyer/payment_success", { title: "Payment fail", msg: "The gateway payment is errors" });
+			}
+
+		} else {
+			res.render("dashboard/buyer/payment_success", { title: "Payment fail", msg: "You haven't enough token to pay" });
+
+		}
+	}
+
 });
 
 router.get("/private/buyer/deleteorder/:orderNumber", isLoggedIn, function (req, res, next) {
@@ -280,7 +313,7 @@ router.get("/private/buyer/getProducts_Statistic", isLoggedIn, function (req, re
 			chartQtyData.push([item.title, item.quantity]);
 			chartMoneyData.push([item.title, item.subtotal]);
 		}
-		res.render("dashboard/buyer/products_statistic", { title: "Products Statistic", products: data, chartQtyData: JSON.stringify(chartQtyData), chartMoneyData: JSON.stringify(chartMoneyData) });
+		res.render("dashboard/buyer/products_statistic", { title: "Products Statistic", products: data,symbol:wallet_config.symbol, chartQtyData: JSON.stringify(chartQtyData), chartMoneyData: JSON.stringify(chartMoneyData) });
 	});
 });
 
@@ -298,46 +331,46 @@ router.get("/private/seller/transactions", isLoggedIn, function (req, res) {
 
 });
 /**products */
-router.get("/private/seller/getallproducts",isLoggedIn, function (req, res) {
+router.get("/private/seller/getallproducts", isLoggedIn, function (req, res) {
 	productService.getAll(function (err, data) {
 		if (err) { throw err; }
 		console.log(data);
-		res.render("dashboard/seller/productlist", { title: "Product List",products:data });
+		res.render("dashboard/seller/productlist", { title: "Product List", products: data,symbol:wallet_config.symbol });
 	});
 
 });
 
-router.get("/private/seller/getProductByOwner",isLoggedIn, function (req, res) {
-	productService.getByOwner(req,function (err, data) {
+router.get("/private/seller/getProductByOwner", isLoggedIn, function (req, res) {
+	productService.getByOwner(req, function (err, data) {
 		if (err) { throw err; }
 		console.log(data);
-		res.render("dashboard/seller/productlist", { title: "Product List",products:data });
+		res.render("dashboard/seller/productlist", { title: "Product List", products: data ,symbol:wallet_config.symbol});
 	});
 
 });
 
-router.post("/private/seller/insertproduct",isLoggedIn, function (req, res) {
+router.post("/private/seller/insertproduct", isLoggedIn, function (req, res) {
 	productService.insert(req, function (err, data) {
 		if (err) { throw err; }
 		res.redirect("/private/seller/getProductByOwner");
 	});
 
 });
-router.get("/private/seller/getbyid/:id",isLoggedIn, function (req, res) {
+router.get("/private/seller/getbyid/:id", isLoggedIn, function (req, res) {
 	productService.getByID(req, function (err, data) {
 		if (err) { throw err; }
-		res.render("dashboard/seller/productedit",{title:"Product Edit",product:data});
+		res.render("dashboard/seller/productedit", { title: "Product Edit", product: data });
 	});
 
 });
-router.post("/private/seller/updateproduct/:id",isLoggedIn, function (req, res) {
+router.post("/private/seller/updateproduct/:id", isLoggedIn, function (req, res) {
 	productService.update(req, function (err, data) {
 		if (err) { throw err; }
 		res.redirect("/private/seller/getProductByOwner");
 	});
 
 });
-router.get("/private/seller/deleteproduct/:id",isLoggedIn, function (req, res) {
+router.get("/private/seller/deleteproduct/:id", isLoggedIn, function (req, res) {
 	productService.delete(req, function (err, data) {
 		if (err) { throw err; }
 		res.redirect("/private/seller/getProductByOwner");
@@ -352,35 +385,42 @@ router.get("/private/seller/getProducts_Statistic", isLoggedIn, function (req, r
 		var chartMoneyData = [["statistic", "money"]];
 		for (let item of data) {
 			chartQtyData.push([item.title, item.quantity]);
-			chartMoneyData.push([item.title, item.quantity*item.price]);
+			chartMoneyData.push([item.title, item.quantity * item.price]);
 		}
-		res.render("dashboard/seller/products_statistic", { title: "Products Statistic", products: data, chartQtyData: JSON.stringify(chartQtyData), chartMoneyData: JSON.stringify(chartMoneyData) });
+		res.render("dashboard/seller/products_statistic", { title: "Products Statistic", products: data,symbol:wallet_config.symbol ,chartQtyData: JSON.stringify(chartQtyData), chartMoneyData: JSON.stringify(chartMoneyData) });
 	});
 });
 
 /**database */
-function productsdb(callback){
+function productsdb(callback) {
 	productService.getAll(function (err, data) {
-		if(err){throw err;};
-		return callback(null,data);
+		if (err) { throw err; };
+		return callback(null, data);
 	});
 }
 
 /**ETHER GATEWAY PAYMENT */
-router.get("/private/buyer/getBalanceForm",isLoggedIn,(req,res)=>{
-	let etherAccount=null;
-	res.render("dashboard/buyer/check_ether_balance",{title:"Check Balance",etherAccount:etherAccount});
+router.get("/private/buyer/getBalanceForm", isLoggedIn, (req, res) => {
+	let etherAccount = null;
+	res.render("dashboard/buyer/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount });
 });
 
-router.post("/private/buyer/getBalance",isLoggedIn,async (req,res)=>{
-	let etherAccount=null;
-		etherAccount=await etherService.getBalance(req.body.address);			
-		if(etherAccount.errCode==500){
-			req.flash("error_message", "the Address is not exist!!!");
-			res.redirect("/private/buyer/getBalanceForm");	
-		}else{
-			res.render("dashboard/buyer/check_ether_balance",{title:"Check Balance",etherAccount:etherAccount});	
+router.post("/private/buyer/getBalance", isLoggedIn, async (req, res) => {
+	let etherAccount = null;
+	req.checkBody("address", "Private key is required").notEmpty();
+	let errors = req.validationErrors();
+	if (errors) {
+		res.render("dashboard/buyer/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount, errors: errors });
+	} else {
+		let error_message="The address is not exist";
+		etherAccount = await etherService.getBalance(req.body.address);
+		if (etherAccount.errCode == 500) {
+			etherAccount=null;
+			res.render("dashboard/buyer/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount, error_message:error_message});
+		} else {
+			res.render("dashboard/buyer/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount,symbol:wallet_config.symbol });
 		}
+	}
 });
 
 /** */

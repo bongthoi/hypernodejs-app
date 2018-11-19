@@ -19,13 +19,13 @@
                             <span class="badge"><%= (session.cart.getItems())[i].quantity%></span>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <%= (session.cart.getItems())[i].subtotal%> GLO
+                            <%= (session.cart.getItems())[i].subtotal%> <%=symbol%>
                         </div>
                     </div>
                     <%}%>
                     <div class="row">
                         <div class="text-right">
-                            <div class="totalPrice">Total: <%= session.cart.totalPrice %> GLO</div>
+                            <div class="totalPrice">Total: <%= session.cart.totalPrice %> <%=symbol%></div>
                             <a href="/private/buyer/viewcart" class="btn btn-success">View Cart</a>
                         </div>
                     </div>

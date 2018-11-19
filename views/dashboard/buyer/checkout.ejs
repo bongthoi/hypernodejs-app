@@ -50,8 +50,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </section>
 
           <!-- Main content -->
-          <section class="content">
-
+          <section class="content">              
+              <div class="row">
+                  <%include ../../partials/errors %>
+              </div>
             <!-- Your Page Content Here -->
             <div class="box-border">
               <div class="row">
@@ -85,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <tr>
                         <td colspan="3"></td>
                         <td><strong><span>Total</span></strong></td>
-                        <td><strong id="amounttotal"><%=totalPrice%></strong>(<span>GLO</span>)</td>
+                        <td><strong id="amounttotal"><%=totalPrice%></strong>(<span><%=symbol%></span>)</td>
                       </tr>
                     </tfoot>
                   </table>
@@ -104,12 +106,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               <label>
                                 <div class="item_pay">
                                   <ul class="item_pay_link">
-                                    <li><span class="w3-bar-item w3-button">Glorious Coin</span></li>
+                                    <li><span class="w3-bar-item w3-button">VinhSang Coin</span></li>
                                     <li><img alt="" class="pay_img" src="/images/payment/handle.png"></li>
                                     <li><input name="PaymentMethod.id" type="radio" onclick="openmethods('1')" value="1"
                                         id="PaymentMethod.id1" checked="checked"></li>
                                   </ul>
-                                </div>
+                                </div>                                
                               </label>
                               <label>
                                   <div class="item_pay">
@@ -134,7 +136,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
                             <div class="col-md-12 pay_info">
                               <div class="methods" style="display: none" id="1">
-                                <p>Quý khách sẽ thanh toán bằng GloCoin qua cỗng thanh toán Glorious Gateway...</p>
+                                <p>Quý khách sẽ thanh toán bằng VSCoin qua cỗng thanh toán VSCoin Gateway...</p>
+                                
+                                <div class="form-group">
+                                  <label for="address">Your address:</label>
+                                  <input type="text" name="vscaddressfrom" class="form-control" style="text-align:left" id="address">
+                                </div>
+                                <div class="form-group">
+                                  <label for="prvkey">Private key:</label>
+                                  <input type="password" name="vscprivatekey" class="form-control" style="text-align:left" id="prvkey">
+                                </div>
                               </div>
                               <div class="methods" style="display: none" id="2">
                                   <p>Quý khách sẽ thanh toán bằng BitCoin thông qua BitCoin Wallet..</p>
@@ -163,6 +174,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </form>
                 </div>
               </div>
+              
             </div>
           </section>
           <!-- /.content -->

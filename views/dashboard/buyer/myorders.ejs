@@ -88,7 +88,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     </strong>
                                                 </td>
                                                 <td class="total_money">
-                                                    <strong class="label label-success"><%=order.amount%> (GLO)</strong>
+                                                    <strong class="label label-success"><%=order.amount%> (<%=symbol%>)</strong>
                                                 </td>
                                                 <td>
                                                     <div>
@@ -125,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <%=JSON.parse(item).quantity%>
                                                     </td>
                                                     <td class="price_money">
-                                                        <span><%=JSON.parse(item).subtotal%></span><strong> (GLO) </strong>
+                                                        <span><%=JSON.parse(item).subtotal%></span><strong> (<%=symbol%>) </strong>
                                                     </td>
                                                 </tr>
                                                 <%}%>

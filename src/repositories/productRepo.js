@@ -93,7 +93,7 @@ module.exports = class ProductRepo {
     };
 
     update(_product, callback) {
-        let method = "productRepo/update/productID: " + _product;
+        let method = "productRepo/update/productID: ";
         console.log(method);
 
         let product = new Product(_product.id, _product.title, _product.description, _product.quantity, _product.price, _product.owner);
