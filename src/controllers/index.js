@@ -273,14 +273,15 @@ router.post("/private/buyer/payment", isLoggedIn, async function (req, res, next
 		let balance = await etherService.getBalance(req.body.vscaddressfrom);
 		if (Number(balance.tokenBalance) >= Number(req.session.cart.totalPrice)) {
 			try {
-				let result = await etherService.transferFrom(req.body.vscaddressfrom, req.body.vscprivatekey, wallet_config.receiverAccount, Number(req.session.cart.totalPrice));
-				console.log("Gateway Payment=" + JSON.stringify(result));
+				var result = await etherService.transferFrom(req.body.vscaddressfrom, req.body.vscprivatekey, wallet_config.receiverAccount, Number(req.session.cart.totalPrice));
+				
 				addOrder(req, function (err, data) {
 					if (err) { res.render("/dashboard/pages/payment_success", { title: "Payment fail", msg: "Order is failed" }); }
 					//console.log(data);
 					var cart = new Cart(false ? req.session.cart : {});
 					req.session.cart = cart;
-					res.render("dashboard/buyer/payment_success", { title: "Payment success", msg: "Payment is successfull" });
+					console.log("Gateway Payment=" + JSON.stringify(result));
+					res.render("dashboard/buyer/payment_success", { title: "Payment success", msg: ""+ JSON.stringify(result)});
 				});
 			} catch (error) {
 				res.render("dashboard/buyer/payment_success", { title: "Payment fail", msg: "The gateway payment is errors" });
