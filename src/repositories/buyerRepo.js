@@ -36,7 +36,7 @@ module.exports = class BuyerRepo {
     };
 
     insert(_buyer) {
-        let buyer = new Buyer(_buyer.buyerID,_buyer.buyerPW, _buyer.companyName);
+        let buyer = new Buyer(_buyer.buyerID,_buyer.buyerPW,_buyer.buyerWL, _buyer.companyName);
         let result;
 
         let method = "buyerRepo/insert/buyerID: " + buyer.buyerID;
@@ -53,6 +53,7 @@ module.exports = class BuyerRepo {
                 "$class": buyer.$class,
                 "buyerID": buyer.buyerID,
                 "buyerPW":buyer.buyerPW,
+                "buyerWL":buyer.buyerWL,
                 "companyName": buyer.companyName
             },
             json: true
@@ -100,7 +101,7 @@ module.exports = class BuyerRepo {
             });
     };
     update(_buyer) {
-        let buyer = new Buyer(_buyer.buyerID,_buyer.buyerPW, _buyer.companyName);
+        let buyer = new Buyer(_buyer.buyerID,_buyer.buyerPW,_buyer.buyerWL, _buyer.companyName);
         let result;
 
         let method = "buyerRepo/update/buyerID: " + buyer.buyerID;
@@ -117,6 +118,7 @@ module.exports = class BuyerRepo {
                 "$class": buyer.$class,
                 "buyerID": buyer.buyerID,
                 "buyerPW":buyer.buyerPW,
+                "buyerWL":buyer.buyerWL,
                 "companyName": buyer.companyName
             },
             json: true

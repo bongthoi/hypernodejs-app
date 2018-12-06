@@ -15,7 +15,7 @@ var sellerRepo = new SellerRepo();
 export const createUser = (newUser, callback) => {
 
 	if (newUser.$class.trim() === bna_config.namespace + ".Buyer") {
-		let buyer = new BuyerModel(newUser.userID, newUser.userPW, newUser.companyName);
+		let buyer = new BuyerModel(newUser.userID, newUser.userPW,newUser.userWL, newUser.companyName);
 
 		bcrypt.genSalt(10, function (err, salt) {
 			bcrypt.hash(buyer.buyerPW, salt, function (err, hash) {
@@ -25,7 +25,7 @@ export const createUser = (newUser, callback) => {
 		});
 
 	} else {
-		let seller = new SellerModel(newUser.userID, newUser.userPW, newUser.companyName);
+		let seller = new SellerModel(newUser.userID, newUser.userPW,newUser.userWL, newUser.companyName);
 		bcrypt.genSalt(10, function (err, salt) {
 			bcrypt.hash(seller.sellerPW, salt, function (err, hash) {
 				seller.sellerPW = hash;
@@ -40,12 +40,12 @@ export const getUserById = (email, callback) => {
 	buyerRepo.getByID(email)
 		.then(data => {
 			if (data != null) {
-				return callback(null, new UserModel(data['buyerID'], data['buyerPW'], data['companyName'], "Buyer"));
+				return callback(null, new UserModel(data['buyerID'], data['buyerPW'], data['buyerWL'], data['companyName'], "Buyer"));
 			} else {
 				sellerRepo.getByID(email)
 					.then(data => {
 						if (data != null) {
-							return callback(null, new UserModel(data['sellerID'], data['sellerPW'], data['companyName'], "Seller"));
+							return callback(null, new UserModel(data['sellerID'], data['sellerPW'], data['sellerWL'], data['companyName'], "Seller"));
 						} else {
 							return callback(null);
 						}

@@ -13,6 +13,8 @@ import ProductService from "../services/productService";
 import { getProductsByUserID } from "../services/statisticService";
 import EtherService from '../services/etherService';
 import User from "../models/user";
+import SellerService from "../services/sellerService";
+import Seller from '../models/seller';
 
 
 
@@ -22,6 +24,7 @@ let router = express.Router();
 let userModel = {};
 var productService = new ProductService();
 var etherService = new EtherService();
+var sellerService=new SellerService();
 
 /**public */
 router.get("/", function (req, res) {
@@ -67,9 +70,9 @@ router.post("/users/register", function (req, res) {
 	else {
 
 		if (userType.trim() === "Buyer".trim()) {
-			userModel = new User(email, password, cpn_name, userType);
+			userModel = new User(email, password,cpn_name,"unknown" , userType);
 		} else {
-			userModel = new User(email, password, cpn_name, userType);
+			userModel = new User(email, password, cpn_name,"unknown" , userType);
 		}
 
 		createUser(userModel, function (err, user) {
@@ -156,7 +159,7 @@ function isLoggedIn(req, res, next) {
 
 /**BUYER */
 router.get("/private/buyer/profile", isLoggedIn, function (req, res) {
-	console.log("user passport=" + req.session["passport"]["user"]);
+	//console.log("user passport=" + req.session["passport"]["user"]);
 	res.render("dashboard/buyer/profile", { title: "Profile Info" });
 });
 
@@ -205,7 +208,7 @@ router.get("/private/buyer/viewcart", isLoggedIn, function (req, res, next) {
 	}
 	var cart = new Cart(req.session.cart);
 
-	console.log(cart.getItems());
+	//console.log(cart.getItems());
 	res.render("dashboard/buyer/viewcart", {
 		title: "View Cart",
 		products: cart.getItems(),
@@ -280,7 +283,7 @@ router.post("/private/buyer/payment", isLoggedIn, async function (req, res, next
 					//console.log(data);
 					var cart = new Cart(false ? req.session.cart : {});
 					req.session.cart = cart;
-					console.log("Gateway Payment=" + JSON.stringify(result));
+					//console.log("Gateway Payment=" + JSON.stringify(result));
 					res.render("dashboard/buyer/payment_success", { title: "Payment success", msg: ""+ JSON.stringify(result)});
 				});
 			} catch (error) {
@@ -320,7 +323,7 @@ router.get("/private/buyer/getProducts_Statistic", isLoggedIn, function (req, re
 
 /**SELLER */
 router.get("/private/seller/profile", isLoggedIn, function (req, res) {
-	console.log("user passport=" + req.session["passport"]["user"]);
+	//console.log("user passport=" + req.session["passport"]["user"]);
 	res.render("dashboard/seller/profile", { title: "Profile Info" });
 });
 
@@ -335,7 +338,7 @@ router.get("/private/seller/transactions", isLoggedIn, function (req, res) {
 router.get("/private/seller/getallproducts", isLoggedIn, function (req, res) {
 	productService.getAll(function (err, data) {
 		if (err) { throw err; }
-		console.log(data);
+		//console.log(data);
 		res.render("dashboard/seller/productlist", { title: "Product List", products: data,symbol:wallet_config.symbol });
 	});
 
@@ -344,7 +347,7 @@ router.get("/private/seller/getallproducts", isLoggedIn, function (req, res) {
 router.get("/private/seller/getProductByOwner", isLoggedIn, function (req, res) {
 	productService.getByOwner(req, function (err, data) {
 		if (err) { throw err; }
-		console.log(data);
+		//console.log(data);
 		res.render("dashboard/seller/productlist", { title: "Product List", products: data ,symbol:wallet_config.symbol});
 	});
 
@@ -424,5 +427,33 @@ router.post("/private/buyer/getBalance", isLoggedIn, async (req, res) => {
 	}
 });
 
+router.get("/private/seller/importWallet", isLoggedIn, async (req, res) => {
+	let seller=null;
+	try {
+		seller=await sellerService.getByID((req.session.user).userID);				
+		
+		//console.log("test="+JSON.stringify(seller));
+		
+		res.render("dashboard/seller/importWallet", { title: "Import wallet",seller:seller});	
+	} catch (error) {		
+		res.render("dashboard/seller/importWallet", { title: "Import wallet",seller:seller});
+	}
+	
+});
+router.post("/private/seller/importWallet", isLoggedIn, async (req, res) => {
+	let seller=null;
+	try {
+		seller=await sellerService.getByID((req.session.user).userID);
+		let newSeller=new Seller(seller.sellerID,seller.sellerPW,req.body.seller_wallet);
+		console.log("test="+JSON.stringify(newSeller));
+		let up=await sellerService.update(newSeller);
+		
+		req.flash("success_message","Import wallet address is successfull");
+		res.redirect("/private/seller/importWallet");
+	} catch (error) {
+		req.flash("error_message","Import wallet address is failed");
+		res.redirect("/private/seller/importWallet");
+	}	
+});
 /** */
 export default router;

@@ -41,6 +41,7 @@ module.exports = class ProductService {
     getByOwner(req,callback) {
         let method = "productService/getByID: " + req.session["passport"]["user"];
         console.log(method);
+        console.log("aaaaaaa="+JSON.stringify((req.session.user)));
         productRepo.getByOwner((req.session.user).companyName, function (err, data) {
             callback(err,data.body);
         });
