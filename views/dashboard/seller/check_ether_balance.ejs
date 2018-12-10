@@ -56,20 +56,55 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="row">
               <div class="col-xs-12">
                 <div class="box">
-                    <%if(seller){%>
+                  <div class="box-header">
+                    <h3 class="box-title"></h3>
+                    <a href="/private/seller/importWallet" class="btn btn-primary">
+                      <% if(etherAccount){%>
+                        Replace Wallet
+                      <%}else{%>
+                        Import Wallet
+                      <%}%>               
+                    </a>
                     <div class="box-tools">
-                      <div class="input-group input-group-sm" style="width: 400px;">
-                        <form action="/private/seller/importWallet" method="POST">
+                      <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
                         <div class="input-group-btn">
-                          <input type="text" id="sellerWL" name="sellerWL" value="<%=seller.sellerWL%>" class="form-control pull-left" placeholder="Address...">
-                          <button type="submit" class="btn btn-default">Import Wallet Address</i></button>
+                          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </div>
-                      </form>
                       </div>
                     </div>
-                    <%}%>
+                  </div>
+                 
                   <!-- /.box-header -->
-                                  
+                  <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                      <tbody>
+                        <tr>
+                          <th>Address</th>
+                          <th>Ether Amount</th>
+                          <th>Token Amount</th>
+                          <th>Status</th>
+                        </tr>
+                        <% if(etherAccount){%>
+                          <tr>
+                            <td>
+                              <%=etherAccount.address%>
+                            </td>
+                            <td>
+                                <%=etherAccount.ethBalance%><strong> (ETH) </strong>
+                            </td>
+                            <td>
+                                <%=etherAccount.tokenBalance%><strong> (<%=symbol%>) </strong>
+                            </td>
+                           
+                            <td><span class="label label-success">Approved</span></td>
+
+                          </tr>
+                          <% }%>
+                      </tbody>
+                    </table>                   
+                  </div>                 
                   <!-- /.box-body -->
                 </div>
                 <!-- /.box -->

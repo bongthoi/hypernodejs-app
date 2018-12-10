@@ -275,8 +275,17 @@ router.post("/private/buyer/payment", isLoggedIn, async function (req, res, next
 
 		let balance = await etherService.getBalance(req.body.vscaddressfrom);
 		if (Number(balance.tokenBalance) >= Number(req.session.cart.totalPrice)) {
-			try {
-				var result = await etherService.transferFrom(req.body.vscaddressfrom, req.body.vscprivatekey, wallet_config.receiverAccount, Number(req.session.cart.totalPrice));
+			let seller=null;
+			try {				
+				if(((req.session.user).userID).indexOf("vinhsang")){
+					seller=await sellerService.getByID("seller@glorious.com");
+					console.log("seller@glorious.com");
+				}else{
+					console.log("seller@vinhsang.com");
+					seller=await sellerService.getByID("seller@vinhsang.com");
+				}
+				
+				var result = await etherService.transferFrom(req.body.vscaddressfrom, req.body.vscprivatekey, seller.sellerWL, Number(req.session.cart.totalPrice));
 				
 				addOrder(req, function (err, data) {
 					if (err) { res.render("/dashboard/pages/payment_success", { title: "Payment fail", msg: "Order is failed" }); }
@@ -404,6 +413,7 @@ function productsdb(callback) {
 }
 
 /**ETHER GATEWAY PAYMENT */
+/**buyer */
 router.get("/private/buyer/getBalanceForm", isLoggedIn, (req, res) => {
 	let etherAccount = null;
 	res.render("dashboard/buyer/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount });
@@ -426,6 +436,25 @@ router.post("/private/buyer/getBalance", isLoggedIn, async (req, res) => {
 		}
 	}
 });
+/**seller */
+router.get("/private/seller/getBalance", isLoggedIn, async (req, res) => {
+	let etherAccount = null;
+	try {
+	let seller=await sellerService.getByID((req.session.user).userID);
+	etherAccount = await etherService.getBalance(seller.sellerWL);
+		if (etherAccount.errCode == 500) {
+			let error_message="The address is not exist";
+			etherAccount=null;
+			res.render("dashboard/seller/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount, error_message:error_message});
+		} else {
+			res.render("dashboard/seller/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount,symbol:wallet_config.symbol });
+		}
+	} catch (error) {
+		let error_message="Multiple errors";
+			etherAccount=null;
+			res.render("dashboard/seller/check_ether_balance", { title: "Check Balance", etherAccount: etherAccount, error_message:error_message});
+	}
+});
 
 router.get("/private/seller/importWallet", isLoggedIn, async (req, res) => {
 	let seller=null;
@@ -440,20 +469,22 @@ router.get("/private/seller/importWallet", isLoggedIn, async (req, res) => {
 	}
 	
 });
+
 router.post("/private/seller/importWallet", isLoggedIn, async (req, res) => {
 	let seller=null;
 	try {
 		seller=await sellerService.getByID((req.session.user).userID);
-		let newSeller=new Seller(seller.sellerID,seller.sellerPW,req.body.seller_wallet);
-		console.log("test="+JSON.stringify(newSeller));
+		let newSeller=new Seller(seller.sellerID,seller.sellerPW,req.body.sellerWL,seller.companyName);
+		//console.log("test="+JSON.stringify(newSeller));
 		let up=await sellerService.update(newSeller);
 		
 		req.flash("success_message","Import wallet address is successfull");
-		res.redirect("/private/seller/importWallet");
+		res.redirect("/private/seller/getBalance");
 	} catch (error) {
 		req.flash("error_message","Import wallet address is failed");
-		res.redirect("/private/seller/importWallet");
+		res.redirect("/private/seller/getBalance");
 	}	
 });
+
 /** */
 export default router;
