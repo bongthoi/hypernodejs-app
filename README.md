@@ -6,7 +6,7 @@
 - [x] Buy/Sell Products
 - [x] Statistic Products
 - [x] Inventory
-- [x] Integrate ethereum PaymentGateWay
+- [x] Integrate ethereum PaymentGateWay wit Ropsten test net
 
 ## Installation
 
