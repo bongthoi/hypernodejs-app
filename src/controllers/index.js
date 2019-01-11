@@ -256,6 +256,9 @@ router.get("/private/buyer/getOrderByUserID", isLoggedIn, function (req, res, ne
 
 });
 
+/**chi moi thuc hien MainUseCase thanh cong,
+ * chua xu ly roll back khi dat hang kg thanh cong
+*/
 router.post("/private/buyer/payment", isLoggedIn, async function (req, res, next) {
 
 	req.checkBody("vscaddressfrom", "Address is required").notEmpty();
