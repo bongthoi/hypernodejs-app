@@ -70,9 +70,9 @@ router.post("/users/register", function (req, res) {
 	else {
 
 		if (userType.trim() === "Buyer".trim()) {
-			userModel = new User(email, password,cpn_name,"unknown" , userType);
+			userModel = new User(email, password,"unknown" ,cpn_name, userType);
 		} else {
-			userModel = new User(email, password, cpn_name,"unknown" , userType);
+			userModel = new User(email, password, "unknown" , cpn_name,userType);
 		}
 
 		createUser(userModel, function (err, user) {
