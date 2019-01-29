@@ -28,8 +28,8 @@ var sellerService=new SellerService();
 
 /**public */
 router.get("/", function (req, res) {
-	//res.redirect("/transactions");
-	res.render("public/index", { title: "Home" });
+	res.redirect("/transactions");
+	//res.render("public/index", { title: "Home" });
 });
 
 
