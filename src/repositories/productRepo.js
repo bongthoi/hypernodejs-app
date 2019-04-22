@@ -1,6 +1,6 @@
 'use strict';
 import rq from "request-promise";
-import db_config from "../../config/db_config.json";
+import private_api from "../../config/private_api.json";
 import Product from '../models/product';
 
 
@@ -17,7 +17,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class,
             json: true
         };
 
@@ -37,7 +37,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class,
             body: {
                 "title": product.title,
                 "description": product.description,
@@ -63,7 +63,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "/" + _productID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class + "/" + _productID,
             json: true
         };
 
@@ -83,7 +83,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "ByOwner/" + _owner,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class + "ByOwner/" + _owner,
             json: true
         };
 
@@ -103,7 +103,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class+"/"+product.id,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class+"/"+product.id,
             body: {
                 "title": product.title,
                 "description": product.description,
@@ -128,7 +128,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "/" + _productID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class + "/" + _productID,
             json: true
         };
 
@@ -148,7 +148,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "/" + _productID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class + "/" + _productID,
             json: true
         };
 
@@ -168,7 +168,7 @@ module.exports = class ProductRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + product.$class + "ByTitleandOwner/" +_title+"/" + _owner,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + product.$class + "ByTitleandOwner/" +_title+"/" + _owner,
             json: true
         };
 

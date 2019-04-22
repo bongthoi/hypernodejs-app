@@ -1,0 +1,5 @@
+{
+    "api_ip":"http://localhost",
+    "api_port":"3002",
+    "api_url":"/composer/admin/"
+}

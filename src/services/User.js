@@ -12,7 +12,7 @@ var buyerRepo = new BuyerRepo();
 var sellerRepo = new SellerRepo();
 
 /** */
-export const createUser = (newUser, callback) => {
+export const  createUser =  (newUser, callback) => {
 
 	if (newUser.$class.trim() === bna_config.namespace + ".Buyer") {
 		let buyer = new BuyerModel(newUser.userID, newUser.userPW,newUser.userWL, newUser.companyName);

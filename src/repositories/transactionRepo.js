@@ -1,6 +1,6 @@
 "use strict";
 import rq from "request-promise";
-import db_config from "../../config/db_config.json";
+import private_api from "../../config/private_api.json";
 import Transaction from "../models/transaction";
 
 module.exports = class TransactionRepo {
@@ -9,7 +9,7 @@ module.exports = class TransactionRepo {
         let result;
 
         let method = "transactionRepo/getAll";
-        //console.log(method+"   "+db_config.api_ip + ":" + db_config.api_port + db_config.api_url + trans.$class);
+        //console.log(method+"   "+private_api.api_ip + ":" + private_api.api_port + private_api.api_url + trans.$class);
 
 
         const options = {
@@ -18,7 +18,7 @@ module.exports = class TransactionRepo {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'                
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + trans.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + trans.$class,
             json: true
         };
         

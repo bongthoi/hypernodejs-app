@@ -1,6 +1,6 @@
 "use strict";
 import rq from "request-promise";
-import db_config from "../../config/db_config.json";
+import private_api from "../../config/private_api.json";
 import Order from '../models/order';
 
 
@@ -21,7 +21,7 @@ module.exports = class OrderRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class + ".getOrderByUserID/" + _userID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + order.$class + ".getOrderByUserID/" + _userID,
             json: true
         };
 
@@ -50,7 +50,7 @@ module.exports = class OrderRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class + ".getOrderByUserID",
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + order.$class + ".getOrderByUserID",
             body: {
                 "$class": order.$class,
                 "buyer": order.buyer,
@@ -89,7 +89,7 @@ module.exports = class OrderRepo {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class + "/" + order.orderNumber,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + order.$class + "/" + order.orderNumber,
             json: true
         };
 

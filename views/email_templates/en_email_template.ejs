@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html amp lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <style>
+        header {
+            background: #F0F0E5;
+            margin: 0px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        footer {
+            background: #F0F0E5;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        footer, header, section{ display: block; }
+        .table-responsive{min-height:.01%;overflow-x:auto; margin-top: 10px; margin-left: auto; margin-right: auto; width: 800px; max-width: 100%;} .table{width:100%;border-collapse:collapse;border-spacing:0} .table td,.table th{background-color:#F3F5EF;border:1px solid #bbb;color:#333;font-family:sans-serif;font-size:100%;padding:10px;vertical-align:top} .table tr:nth-child(even) td{background-color:#F0F0E5} .table th{background-color:#EAE2CF;color:#333;font-size:110%} .table tr.even:hover td,.table tr:hover td{color:#222;background-color:#FFFBEF} .tg-bf{font-weight:700} .tg-it{font-style:italic} .tg-left{text-align:left} .tg-right{text-align:right} .tg-center{text-align:center} @media screen and (max-width:767px){.table-responsive{width:100%;margin-bottom:15px;overflow-y:hidden;-ms-overflow-style:-ms-autohiding-scrollbar} .table-responsive>.table{margin-bottom:0} .table-responsive>.table>tbody>tr>td,.table-responsive>.table>tbody>tr>th,.table-responsive>.table>tfoot>tr>td,.table-responsive>.table>tfoot>tr>th,.table-responsive>.table>thead>tr>td,.table-responsive>.table>thead>tr>th{white-space:nowrap} }
+        .table-responsive tr td {
+            width: 50%;
+        }
+        hr {
+            border-bottom: 1px solid #222;
+        }
+</style>
+</head>
+
+<body>
+    <div class='table-responsive'>
+        <header>
+            <h3>Hello, <%=mail_content.user_id%> !</h3>
+            <p>Thank you for visiting Hyperledger fabric - Ethereum - Ecosystem</p>
+        </header>
+        
+        <table class="table">
+            <tr>
+                <th colspan="4" class="tg-center ">
+                    Let's press button :
+                    <span type="text" value="" id="showtodayelements"><a href="<%=mail_content.link_activate%>">Activate</a></span>
+                </th>
+            </tr>
+            
+        </table><br>
+
+        <footer>
+            <p>Best regards,</p>
+            <h3>Hyperledger fabric - Ethereum - Ecosystem</h3>
+        </footer>
+    </div>
+</body>
+
+</html>

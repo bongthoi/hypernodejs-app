@@ -15,6 +15,12 @@ import EtherService from '../services/etherService';
 import User from "../models/user";
 import SellerService from "../services/sellerService";
 import Seller from '../models/seller';
+import AuthService from '../services/authService';
+import Server_config from '../../config/server_config'
+import MailService from '../services/mailService';
+import MailModel from '../models/mailModel';
+import MailConfig from '../../config/mail_config.json'
+import ejs from 'ejs';
 
 
 
@@ -25,7 +31,8 @@ let userModel = {};
 var productService = new ProductService();
 var etherService = new EtherService();
 var sellerService=new SellerService();
-
+var authService=new AuthService();
+let mailService = new MailService();
 /**public */
 router.get("/", function (req, res) {
 	res.redirect("/transactions");
@@ -49,7 +56,7 @@ router.get("/users/login", function (req, res) {
 	res.render("public/login", { title: "Login User" });
 });
 
-router.post("/users/register", function (req, res) {
+router.post("/users/register", async function (req, res) {
 	let cpn_name = req.body.cpn_name;
 	let email = req.body.email;
 	let password = req.body.password;
@@ -68,21 +75,47 @@ router.post("/users/register", function (req, res) {
 		res.render("public/register", { title: "Register", errors: errors });
 	}
 	else {
-
+		let userAuth={};
 		if (userType.trim() === "Buyer".trim()) {
 			userModel = new User(email, password,"unknown" ,cpn_name, userType);
+			userAuth.id=email;
+			userAuth.type=userType;
 		} else {
 			userModel = new User(email, password, "unknown" , cpn_name,userType);
+			userAuth.id=email;
+			userAuth.type=userType;
 		}
 
-		createUser(userModel, function (err, user) {
+		await createUser(userModel, function (err, user) {
 			if (err) throw err;
-			else console.log(user);
+			else {console.log(user)};
 		});
-		req.flash("success_message", "You have registered, Now please login");
+		let mail_content={"user_id":userAuth.id,"link_activate":Server_config.server_ip+":"+Server_config.server_port+"/users/account_activate/"+userAuth.id+"/"+userAuth.type};
+		console.log("xxxx="+JSON.stringify(mail_content));
+		await ejs.renderFile(path.dirname(require.main.filename) + "/views/email_templates/en_email_template.ejs", { title: 'Activate Account',mail_content:mail_content },  function (err, data) {
+			if (err) {
+				console.log(err);
+			} else {				
+				let _email = new MailModel(MailConfig.mail_sender,email,"Account Activate",data);
+				console.log(JSON.stringify(_email));
+				let result = mailService.sendMail(_email);
+			}});
+		
+		req.flash("success_message", "You have registered, Now please check mail for activate");
 		res.redirect("login");
 	}
 });
+
+router.get("/users/account_activate/:id/:type", async function (req, res) {
+	let userAuth={};
+	userAuth.id=req.params.id;
+	userAuth.type=req.params.type;
+	let result=await authService.authenticateUser(userAuth);
+	console.log(result);
+
+	res.render("public/login", { title: "Login User" });
+});
+
 
 router.post("/users/login", passport.authenticate("local", {
 	failureRedirect: "/users/login", failureFlash: true
@@ -232,19 +265,22 @@ router.get("/private/buyer/deletecart", isLoggedIn, function (req, res, next) {
 	res.redirect("/private/buyer/viewcart");
 });
 
-router.get("/private/buyer/checkout", isLoggedIn, function (req, res, next) {
+router.get("/private/buyer/checkout", isLoggedIn, async function (req, res, next) {
 	if (!req.session.cart) {
 		return res.render("dashboard/buyer/viewcart", {
 			products: null
 		});
 	}
+
+	let sellers=await sellerService.getAll();
+	
 	var cart = new Cart(req.session.cart);
 
 	res.render("dashboard/buyer/checkout", {
 		title: "Checkout",
 		products: cart.getItems(),
 		totalPrice: cart.totalPrice,
-		symbol:wallet_config.symbol
+		symbol:wallet_config.symbol,sellers:sellers
 	});
 });
 
@@ -280,13 +316,7 @@ router.post("/private/buyer/payment", isLoggedIn, async function (req, res, next
 		if (Number(balance.tokenBalance) >= Number(req.session.cart.totalPrice)) {
 			let seller=null;
 			try {				
-				if(((req.session.user).userID).indexOf("vinhsang")){
-					seller=await sellerService.getByID("seller@glorious.com");
-					console.log("seller@glorious.com");
-				}else{
-					console.log("seller@vinhsang.com");
-					seller=await sellerService.getByID("seller@vinhsang.com");
-				}
+				seller=await sellerService.getByID(req.body.seller);
 				
 				var result = await etherService.transferFrom(req.body.vscaddressfrom, req.body.vscprivatekey, seller.sellerWL, Number(req.session.cart.totalPrice));
 				

@@ -1,6 +1,6 @@
 "use strict";
 import rq from "request-promise";
-import db_config from "../../config/db_config.json";
+import private_api from "../../config/private_api.json";
 import Seller from "../models/seller";
 
 module.exports = class SellerRepo {
@@ -18,7 +18,7 @@ module.exports = class SellerRepo {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'                
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class,
             json: true
         };
         
@@ -47,7 +47,7 @@ module.exports = class SellerRepo {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'                
             },            
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class,       
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class,       
             body: {
                 "$class": seller.$class,
                 "sellerID": seller.sellerID,
@@ -84,7 +84,7 @@ module.exports = class SellerRepo {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'                
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class + "/" + seller.sellerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class + "/" + seller.sellerID,
             json: true
         };
 
@@ -112,7 +112,7 @@ module.exports = class SellerRepo {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'                
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class + "/" + seller.sellerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class + "/" + seller.sellerID,
             body: {
                 "$class": seller.$class,
                 "sellerID": seller.sellerID,
@@ -148,7 +148,7 @@ module.exports = class SellerRepo {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'                
             },
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class + "/" + seller.sellerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class + "/" + seller.sellerID,
             json: true
         };
 

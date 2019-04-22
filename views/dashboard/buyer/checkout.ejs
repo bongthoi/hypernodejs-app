@@ -56,6 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
             <!-- Your Page Content Here -->
             <div class="box-border">
+              <form action="/private/buyer/payment" method="POST">
               <div class="row">
                 <div class="col-sm-6">
                   <%if(products.length>0){%>
@@ -93,11 +94,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </table>
                   <%}else{%>Your shopping cart is empty.
                     <%}%>
-                </div>
-                <div class="col-sm-6">
-                  <form action="/private/buyer/payment" method="POST">
+                  
 
-                    <h3 class="checkout-sep"><span>2. Payment Information</span></h3>
+                  <h3 class="checkout-sep"><span>2.Choose Seller</span></h3>
+                  <table class="table table-bordered table-responsive cart_summary">
+                    <thead>
+                      <tr>
+                        <th><span></span></th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>                   
+                      <tr>
+                        <td class="price">
+                          <select class="form-control" id="seller" name="seller">
+                            <%if(sellers.length>0){%>
+
+                              <%for(var i=0;i<sellers.length;i++){%>
+                              <option value="<%=sellers[i].sellerID%>"><%=sellers[i].sellerID%></option>
+                              <%}%>  
+                            <%}%>
+                        </select>
+                        </td>                        
+                      </tr>                    
+                    </tbody>                    
+                  </table>                  
+                </div>
+
+
+
+                <div class="col-sm-6">
+                  <!-- <form action="/private/buyer/payment" method="POST"> -->
+
+                    <h3 class="checkout-sep"><span>3. Payment Information</span></h3>
                     <div class="box-border">
                       <ul>
                         <li class="row">
